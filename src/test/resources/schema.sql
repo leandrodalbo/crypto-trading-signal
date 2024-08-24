@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS ONEDAY;
+CREATE TABLE ONEDAY (
+    SYMBOL              varchar(30) PRIMARY KEY NOT NULL,
+    SMACROSSOVER        varchar(10) NOT NULL,
+    VERSION             integer NOT NULL
+);

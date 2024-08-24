@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: crypto-trading-signal
+
+crypto-data:
+  apiEndpoint: https://api.binance.com
+  symbols:
+    - MANAUSDT
+    - BATUSDT
+    - CHZUSDT
+    - COMPUSDT
+    - SANDUSDT
+    - ADAUSDT
+    - XLMUSDT
+    - AUDIOUSDT
+    - ZRXUSDT
+    - XRPUSDT
+    - AVAXUSDT
+    - LINKUSDT
+    - LTCUSDT
+    - AAVEUSDT
+    - SLPUSDT
+    - DOTUSDT
+    - MKRUSDT
+    - AXSUSDT
+    - FETUSDT
+    - BCHUSDT
+    - GRTUSDT
+    - SKLUSDT
+    - FTMUSDT
+    - HBARUSDT
+    - MATICUSDT
+    - SOLUSDT
+    - BTCUSDT

@@ -1,13 +1,13 @@
-package com.crypto.trading.signal.demo;
+package com.crypto.trading.signal;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication {
+public class TradingSignal {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(TradingSignal.class, args);
 	}
 
 }
