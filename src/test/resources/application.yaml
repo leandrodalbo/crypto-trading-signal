@@ -7,3 +7,4 @@ spring:
     password: password
     url: jdbc:h2:mem:tradingsignal
     driverClassName: org.h2.Driver
+

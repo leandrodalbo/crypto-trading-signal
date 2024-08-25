@@ -1,6 +1,9 @@
 spring:
   application:
     name: crypto-trading-signal
+sma:
+  shortPeriod: 9
+  longPeriod: 21
 
 crypto-data:
   apiEndpoint: https://api.binance.com
