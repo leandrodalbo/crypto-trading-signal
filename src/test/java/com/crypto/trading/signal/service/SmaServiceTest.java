@@ -1,9 +1,8 @@
-package com.crypto.trading.signal;
+package com.crypto.trading.signal.service;
 
 
 import com.crypto.trading.signal.indicator.SimpleMovingAverage;
 import com.crypto.trading.signal.model.TradingSignal;
-import com.crypto.trading.signal.service.SmaService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
