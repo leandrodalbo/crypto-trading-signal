@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS oneday;
 CREATE TABLE oneday (
     symbol              varchar(30) PRIMARY KEY NOT NULL,
     smacrossover        varchar(10) NOT NULL,

@@ -39,7 +39,9 @@ public class RefreshDataService {
                         for (int i = 0; i < prices.length; i++)
                             prices[i] = closingPrice.get(i);
 
-                        oneDayRepository.save(new OneDay(symbol, smaService.smaSignal(prices), null));
+                        oneDayRepository.save(new OneDay(symbol, smaService.smaSignal(prices), null))
+                                .subscribe();
+
                     });
         }
 
