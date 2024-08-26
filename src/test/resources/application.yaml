@@ -5,6 +5,8 @@ spring:
     username: user
     password: password
     url: r2dbc:postgresql://localhost:5432/tradingsignal
+  flyway:
+    enabled: false
   sql:
     init:
       mode: always
