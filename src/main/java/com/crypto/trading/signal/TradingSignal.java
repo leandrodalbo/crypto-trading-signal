@@ -9,9 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 public class TradingSignal {
-
-	public static void main(String[] args) {
-		SpringApplication.run(TradingSignal.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(TradingSignal.class, args);
+    }
 }

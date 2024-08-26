@@ -13,18 +13,18 @@ import reactor.test.StepVerifier;
 
 @DataR2dbcTest
 @Testcontainers
-public class OneDayRepositoryTest {
+public class FourHourRepositoryTest {
 
     @Container
     static PostgreSQLContainer<?> container =
             new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"));
 
     @Autowired
-    private OneDayRepository repository;
+    private FourHourRepository repository;
 
     @DynamicPropertySource
     static void postgresqlProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.r2dbc.url", OneDayRepositoryTest::postgresUrl);
+        registry.add("spring.r2dbc.url", FourHourRepositoryTest::postgresUrl);
         registry.add("spring.r2dbc.username", container::getUsername);
         registry.add("spring.r2dbc.password", container::getPassword);
 

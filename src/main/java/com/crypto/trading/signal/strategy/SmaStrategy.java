@@ -1,16 +1,16 @@
-package com.crypto.trading.signal.service;
+package com.crypto.trading.signal.strategy;
 
 import com.crypto.trading.signal.indicator.SimpleMovingAverage;
 import com.crypto.trading.signal.model.TradingSignal;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SmaService {
+public class SmaStrategy {
 
     private static final int LAST_TEN = 10;
     private final SimpleMovingAverage sma;
 
-    public SmaService(SimpleMovingAverage sma) {
+    public SmaStrategy(SimpleMovingAverage sma) {
         this.sma = sma;
     }
 
