@@ -1,14 +1,18 @@
+server:
+  port: 8288
+
 spring:
   application:
     name: crypto-trading-signal
-  sql:
-    init:
-      mode: always
-    datasource:
-      username: user
-      password: password
-      url: jdbc:postgresql://localhost:5432/tradingsignal
-      driverClassName: org.postgresql.Driver
+  r2dbc:
+    username: user
+    password: password
+    url: r2dbc:postgresql://localhost:5432/tradingsignal
+  flyway:
+    url: jdbc:postgresql://localhost:5432/tradingsignal
+    user: ${spring.r2dbc.username}
+    password: ${spring.r2dbc.password}
+
 sma:
   shortPeriod: 9
   longPeriod: 21

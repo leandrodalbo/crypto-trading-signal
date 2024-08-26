@@ -1,29 +1,47 @@
 package com.crypto.trading.signal.repository;
 
-
-import com.crypto.trading.signal.entity.OneDay;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
+import reactor.test.StepVerifier;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-@DataJdbcTest
+@DataR2dbcTest
+@Testcontainers
 public class OneDayRepositoryTest {
+
+    @Container
+    static PostgreSQLContainer<?> container =
+            new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"));
 
     @Autowired
     private OneDayRepository repository;
 
-    @Test
-    void willFindById() {
-
-        Optional<OneDay> oneDay = repository.findById("BTCUSDT");
-
-        assertThat(oneDay.isPresent()).isTrue();
+    @DynamicPropertySource
+    static void postgresqlProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.r2dbc.url", OneDayRepositoryTest::postgresUrl);
+        registry.add("spring.r2dbc.username", container::getUsername);
+        registry.add("spring.r2dbc.password", container::getPassword);
 
     }
 
+    private static String postgresUrl() {
+        return String.format("r2dbc:postgresql://%s:%s/%s",
+                container.getContainerIpAddress(),
+                container.getMappedPort(PostgreSQLContainer.POSTGRESQL_PORT),
+                container.getDatabaseName());
+    }
 
+    @Test
+    void willFindById() {
+
+        StepVerifier.create(repository.findById("BTCUSDT"))
+                .expectNextMatches(itr -> itr.symbol().equals("BTCUSDT"))
+                .verifyComplete();
+    }
 }

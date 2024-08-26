@@ -1,10 +1,40 @@
 spring:
+  application:
+    name: crypto-trading-signal
+  r2dbc:
+    username: user
+    password: password
+    url: r2dbc:postgresql://localhost:5432/tradingsignal
   sql:
     init:
       mode: always
-  datasource:
-    username: sa
-    password: password
-    url: jdbc:h2:mem:tradingsignal
-    driverClassName: org.h2.Driver
-
+binance:
+  apiuri: https://api.binance.com
+  symbols:
+    - BTCUSDT
+    - SOLUSDT
+    - MATICUSDT
+    - HBARUSDT
+    - FTMUSDT
+    - SKLUSDT
+    - DOTUSDT
+    - GRTUSDT
+    - BCHUSDT
+    - FETUSDT
+    - AXSUSDT
+    - MKRUSDT
+    - SLPUSDT
+    - AAVEUSDT
+    - LTCUSDT
+    - LINKUSDT
+    - AVAXUSDT
+    - XRPUSDT
+    - ZRXUSDT
+    - AUDIOUSDT
+    - XLMUSDT
+    - ADAUSDT
+    - SANDUSDT
+    - COMPUSDT
+    - CHZUSDT
+    - BATUSDT
+    - MANAUSDT

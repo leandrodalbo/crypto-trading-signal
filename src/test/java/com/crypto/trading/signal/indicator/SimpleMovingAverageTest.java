@@ -1,24 +1,18 @@
 package com.crypto.trading.signal.indicator;
 
 
+import com.tictactec.ta.lib.Core;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.testcontainers.shaded.org.checkerframework.checker.units.qual.C;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 public class SimpleMovingAverageTest {
 
-    @Autowired
-    SimpleMovingAverage sma;
-
-    @Value("${sma.shortPeriod}")
-    private int shortSmaPeriod;
-
-    @Value("${sma.longPeriod}")
-    private int longSmaPeriod;
+    SimpleMovingAverage sma = new SimpleMovingAverage(new Core());
 
     @Test
     void willCalculateShortMAs() {
@@ -31,7 +25,7 @@ public class SimpleMovingAverageTest {
             sum += f;
 
         assertThat(result.length).isEqualTo(1);
-        assertThat(result[0]).isEqualTo(sum / shortSmaPeriod);
+        assertThat(result[0]).isEqualTo(sum / 9);
 
     }
 
@@ -46,7 +40,7 @@ public class SimpleMovingAverageTest {
             sum += f;
 
         assertThat(result.length).isEqualTo(1);
-        assertThat(result[0]).isEqualTo(sum / longSmaPeriod);
+        assertThat(result[0]).isEqualTo(sum / 21);
 
     }
 }

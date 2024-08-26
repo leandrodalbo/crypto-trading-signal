@@ -3,6 +3,7 @@ package com.crypto.trading.signal.service;
 import com.crypto.trading.signal.entity.OneDay;
 import com.crypto.trading.signal.repository.OneDayRepository;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 @Service
 public class OneDaySignalService {
@@ -14,7 +15,7 @@ public class OneDaySignalService {
         this.oneDayRepository = oneDayRepository;
     }
 
-    public Iterable<OneDay> getAll() {
+    public Flux<OneDay> getAll() {
         return this.oneDayRepository.findAll();
     }
 }

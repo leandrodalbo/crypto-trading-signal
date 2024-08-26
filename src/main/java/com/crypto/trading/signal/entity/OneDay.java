@@ -6,18 +6,18 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("ONEDAY")
+@Table("oneday")
 public record OneDay(
 
         @Id
-        @Column("SYMBOL")
+        @Column("symbol")
         String symbol,
 
-        @Column("SMACROSSOVER")
+        @Column("smacrossover")
         TradingSignal smaCrossover,
 
         @Version
-        @Column("VERSION")
+        @Column("version")
         Integer version
 ) {
 }
