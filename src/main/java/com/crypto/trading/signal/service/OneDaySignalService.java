@@ -35,8 +35,12 @@ public class OneDaySignalService {
         return this.oneDayRepository.findAll();
     }
 
+    public Mono<OneDay> getById(String symbol) {
+        return this.oneDayRepository.findById(symbol);
+    }
+
     public Mono<Object> saveNewSymbol(String symbol) {
-        boolean symbolExists = oneDayRepository.existsById(symbol).block();
+        boolean symbolExists = Boolean.TRUE.equals(oneDayRepository.existsById(symbol).block());
         Candle[] candles = binanceData.fetchOHLC(symbol, Timeframe.D1).block();
 
         if (symbolExists)
@@ -45,25 +49,38 @@ public class OneDaySignalService {
         if (candles.length == 0)
             return Mono.just(Message.INVALID_SYMBOL.getMessage());
 
-        return Mono.just(oneDayRepository.save(new OneDay(symbol, TradingSignal.NONE, 0)));
-
+        return Mono.just(oneDayRepository.save(new OneDay(symbol, TradingSignal.NONE, 0)).subscribe());
     }
 
-    public void refresh() {
+    public Mono<Object> deleteSymbol(String symbol) {
+        boolean symbolExists = Boolean.TRUE.equals(oneDayRepository.existsById(symbol).block());
+
+        if (!symbolExists)
+            return Mono.just(Message.SYMBOL_NOT_EXISTS.getMessage());
+
+        return Mono.just(oneDayRepository.deleteById(symbol).subscribe());
+    }
+
+    public Mono<Object> refresh(String symbol) {
+        OneDay oneDay = oneDayRepository.findById(symbol).block();
+
+        if (oneDay == null)
+            return Mono.just(Message.SYMBOL_NOT_EXISTS.getMessage());
+
+        float[] closingPrices = closingPrices(symbol);
+
+        TradingSignal smaSignal = smaStrategy.smaSignal(closingPrices);
+
+        return Mono.just(oneDayRepository.save(new OneDay(oneDay.symbol(), smaSignal, oneDay.version()))
+                .subscribe());
+    }
+
+    public void randomRefresh() {
         List<OneDay> items = this.oneDayRepository.findAll()
                 .collectList()
                 .block();
 
-        OneDay oneDay = randomItem(items);
-        binanceData.fetchOHLC(oneDay.symbol(), Timeframe.D1)
-                .subscribe(candles -> {
-                    float[] closingPrices = toPrimitiveArray(Arrays.stream(candles).map(Candle::close)
-                            .toList());
-                    TradingSignal tradingSignal = smaStrategy.smaSignal(closingPrices);
-                    oneDayRepository.save(new OneDay(oneDay.symbol(), tradingSignal, oneDay.version()))
-                            .subscribe();
-                });
-
+        refresh(randomItem(items).symbol());
     }
 
     private float[] toPrimitiveArray(List<Float> items) {
@@ -71,6 +88,11 @@ public class OneDaySignalService {
         for (int i = 0; i < result.length; i++)
             result[i] = items.get(i);
         return result;
+    }
+
+    private float[] closingPrices(String symbol) {
+        return toPrimitiveArray(Arrays.stream(binanceData.fetchOHLC(symbol, Timeframe.D1).block()).map(Candle::close)
+                .toList());
     }
 
     private OneDay randomItem(List<OneDay> items) {

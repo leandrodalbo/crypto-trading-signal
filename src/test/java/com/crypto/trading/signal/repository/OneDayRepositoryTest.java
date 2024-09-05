@@ -11,6 +11,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import reactor.test.StepVerifier;
 
+import java.util.Objects;
+
 @DataR2dbcTest
 @Testcontainers
 public class OneDayRepositoryTest {
@@ -41,6 +43,13 @@ public class OneDayRepositoryTest {
     void willFindById() {
         StepVerifier.create(repository.findById("BTCUSDT"))
                 .expectNextMatches(itr -> itr.symbol().equals("BTCUSDT"))
+                .verifyComplete();
+    }
+
+    @Test
+    void willNotFindAnything() {
+        StepVerifier.create(repository.findById("rubbish"))
+                .expectNextCount(0)
                 .verifyComplete();
     }
 

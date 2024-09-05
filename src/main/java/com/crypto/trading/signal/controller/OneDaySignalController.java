@@ -21,8 +21,23 @@ public class OneDaySignalController {
         return service.getAll();
     }
 
+    @GetMapping("/{symbol}")
+    public Mono<OneDay> byId(@PathVariable String symbol) {
+        return service.getById(symbol);
+    }
+
     @PostMapping("/add/{symbol}")
     public Mono<Object> add(@PathVariable String symbol) {
         return service.saveNewSymbol(symbol);
+    }
+
+    @DeleteMapping("/delete/{symbol}")
+    public Mono<Object> delete(@PathVariable String symbol) {
+        return service.deleteSymbol(symbol);
+    }
+
+    @PutMapping("/refresh/{symbol}")
+    public Mono<Object> refresh(@PathVariable String symbol) {
+        return service.refresh(symbol);
     }
 }

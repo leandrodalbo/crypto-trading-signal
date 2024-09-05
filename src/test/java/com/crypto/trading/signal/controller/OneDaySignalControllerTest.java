@@ -50,4 +50,43 @@ public class OneDaySignalControllerTest {
 
         verify(service, times(1)).saveNewSymbol(anyString());
     }
+
+    @Test
+    void shouldDeleteASymbol() throws Exception {
+        given(service.deleteSymbol(anyString())).willReturn(Mono.empty());
+
+        client.delete()
+                .uri("/oneday/delete/BTCUSDT")
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        verify(service, times(1)).deleteSymbol(anyString());
+    }
+
+    @Test
+    void shouldGetASymbol() throws Exception {
+        given(service.getById(anyString())).willReturn(Mono.empty());
+
+        client.get()
+                .uri("/oneday/BTCUSDT")
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        verify(service, times(1)).getById(anyString());
+    }
+
+    @Test
+    void shouldRefreshASymbol() throws Exception {
+        given(service.refresh(anyString())).willReturn(Mono.empty());
+
+        client.put()
+                .uri("/oneday/refresh/BTCUSDT")
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        verify(service, times(1)).refresh(anyString());
+    }
 }

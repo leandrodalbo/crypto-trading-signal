@@ -14,6 +14,6 @@ public class Refresh {
 
     @Scheduled(cron = "0 */1 * * * ?")
     public void refresh() {
-        oneDaySignalService.refresh();
+        oneDaySignalService.randomRefresh();
     }
 }
