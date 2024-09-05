@@ -57,8 +57,12 @@ public class BinanceData {
                                 .build())
                 .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .retrieve()
-                .bodyToMono(List.class)
-                .map(it -> toCandlesArray(it))
+                .bodyToMono(Object.class)
+                .map(it -> {
+                    if (it instanceof List<?>)
+                        return toCandlesArray((List) it);
+                    return new Candle[0];
+                })
                 .doOnError(e -> logger.error(e.getClass().getSimpleName()));
     }
 

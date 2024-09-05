@@ -109,6 +109,22 @@ public class BinanceDataTest {
     }
 
     @Test
+    void shouldHandleAndInvalidSymbol() throws JsonProcessingException {
+        var mockResponse = new MockResponse()
+                .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .setBody("{\"code\":-1121,\"msg\":\"Invalid symbol.\"}");
+
+        mockWebServer.enqueue(mockResponse);
+
+        Mono candles = binanceData.fetchOHLC("BTCUSD", Timeframe.H1);
+
+        StepVerifier.create(candles)
+                .expectNextMatches(it -> ((Candle[]) it).length == 0)
+                .verifyComplete();
+
+    }
+
+    @Test
     void willReturnAnArrayOfThreeCandles() {
         List<Object> c0 = List.of(
                 String.valueOf(Instant.now().getEpochSecond()),
