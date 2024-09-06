@@ -1,6 +1,9 @@
 # crypto-trading-signal
 crypto-trading-signal
 
+- Fetching and analysing candles from Binance
+- Using different trading indicators to spot buy/sell opportunities
+- Using spring-boot and Java with ta-lib
 
 # running postgres container
 ```bash
