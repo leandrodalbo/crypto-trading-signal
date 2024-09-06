@@ -17,7 +17,12 @@ import reactor.test.StepVerifier;
 
 import java.util.Random;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+
 
 @ExtendWith(MockitoExtension.class)
 public class OneDaySignalServiceTest {
