@@ -15,6 +15,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.doNothing;
 
 @WebFluxTest(OneHourSignalController.class)
 public class OneHourSignalControllerTest {
@@ -49,5 +50,18 @@ public class OneHourSignalControllerTest {
                 .is2xxSuccessful();
 
         verify(service, times(1)).getById(anyString());
+    }
+
+    @Test
+    void shouldRefreshASymbol() throws Exception {
+        doNothing().when(service).refresh(anyString());
+
+        client.put()
+                .uri("/onehour/refresh/BTCUSDT")
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        verify(service, times(1)).refresh(anyString());
     }
 }
