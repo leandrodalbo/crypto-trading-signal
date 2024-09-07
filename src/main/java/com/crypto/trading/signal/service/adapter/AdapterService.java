@@ -1,11 +1,13 @@
 package com.crypto.trading.signal.service.adapter;
 
 import com.crypto.trading.signal.model.Candle;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Service
 public class AdapterService {
 
     public float[] closingPrices(Mono<Candle[]> candles) {
