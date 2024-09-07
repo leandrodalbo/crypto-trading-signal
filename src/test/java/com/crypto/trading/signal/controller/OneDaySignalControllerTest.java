@@ -4,6 +4,7 @@ import com.crypto.trading.signal.entity.OneDay;
 import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.service.OneDaySignalService;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,8 +14,7 @@ import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @WebFluxTest(OneDaySignalController.class)
 public class OneDaySignalControllerTest {
@@ -79,7 +79,7 @@ public class OneDaySignalControllerTest {
 
     @Test
     void shouldRefreshASymbol() throws Exception {
-        given(service.refresh(anyString())).willReturn(Mono.empty());
+        doNothing().when(service).refresh(anyString());
 
         client.put()
                 .uri("/oneday/refresh/BTCUSDT")

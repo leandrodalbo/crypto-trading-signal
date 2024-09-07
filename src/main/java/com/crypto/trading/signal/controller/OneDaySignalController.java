@@ -43,7 +43,7 @@ public class OneDaySignalController {
     }
 
     @PutMapping("/refresh/{symbol}")
-    public Mono<Object> refresh(@PathVariable String symbol) {
-        return service.refresh(symbol);
+    public void refresh(@PathVariable String symbol) {
+        service.refresh(symbol);
     }
 }

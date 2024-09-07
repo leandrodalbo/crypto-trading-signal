@@ -5,6 +5,7 @@ import com.crypto.trading.signal.fetchdata.BinanceData;
 import com.crypto.trading.signal.model.Candle;
 import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.repository.OneDayRepository;
+import com.crypto.trading.signal.service.adapter.AdapterService;
 import com.crypto.trading.signal.strategy.SmaStrategy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,8 +30,12 @@ public class OneDaySignalServiceTest {
 
     @InjectMocks
     OneDaySignalService service;
+
     @Mock
-    private OneDayRepository repository;
+    AdapterService adapterService;
+
+    @Mock
+    private OneDayRepository oneDayRepository;
 
     @Mock
     private BinanceData binanceData;
@@ -43,124 +48,124 @@ public class OneDaySignalServiceTest {
 
     @Test
     void willFindAllRecords() {
-
-        when(repository.findAll()).thenReturn(Flux.just(new OneDay("BTCUSDT", TradingSignal.BUY, 0)));
+        when(oneDayRepository.findAll()).thenReturn(Flux.just(new OneDay("BTCUSDT", TradingSignal.BUY, 0)));
 
         Flux<OneDay> result = service.getAll();
 
         StepVerifier.create(result)
                 .thenConsumeWhile(it -> !it.symbol().isEmpty());
 
-        verify(repository, times(1)).findAll();
-
+        verify(oneDayRepository, times(1)).findAll();
     }
 
     @Test
     void willFindById() {
-        when(repository.findById(anyString())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.BUY, 0)));
+        when(oneDayRepository.findById(anyString())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.BUY, 0)));
 
         Mono<OneDay> result = service.getById("BTCUSDT");
 
         StepVerifier.create(result)
                 .thenConsumeWhile(it -> !it.symbol().isEmpty());
-        verify(repository, times(1)).findById(anyString());
+        verify(oneDayRepository, times(1)).findById(anyString());
     }
 
     @Test
     void randomRefresh() {
-        when(repository.findById(anyString())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.SELL, 0)));
-        when(repository.findAll()).thenReturn(Flux.just(new OneDay("BTCUSDT", TradingSignal.SELL, 0)));
+        when(adapterService.closingPrices(any())).thenReturn(new float[]{23.3f});
+        when(oneDayRepository.findAll()).thenReturn(Flux.just(new OneDay("BTCUSDT", TradingSignal.SELL, 0)));
         when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f)}));
         when(smaStrategy.smaSignal(any())).thenReturn(TradingSignal.BUY);
-        when(repository.save(any())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.BUY, 0)));
+        when(oneDayRepository.save(any())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.BUY, 0)));
         when(random.nextInt(0, 1)).thenReturn(0);
 
         service.randomRefresh();
 
-        verify(repository, times(1)).findById(anyString());
-        verify(repository, times(1)).findAll();
-        verify(repository, times(1)).save(any());
+        verify(oneDayRepository, times(1)).findAll();
+        verify(oneDayRepository, times(1)).save(any());
         verify(binanceData, times(1)).fetchOHLC(anyString(), any());
         verify(smaStrategy, times(1)).smaSignal(any());
+        verify(adapterService, times(1)).closingPrices(any());
     }
 
     @Test
     void shouldNotSaveAnewSymbolIfItAlreadyExists() {
-        when(repository.existsById(anyString())).thenReturn(Mono.just(true));
+        when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(true));
         when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[0]));
 
         service.saveNewSymbol("BTCUSDT");
 
-        verify(repository, times(1)).existsById(anyString());
-        verify(repository, times(0)).save(any());
+        verify(oneDayRepository, times(1)).existsById(anyString());
+        verify(oneDayRepository, times(0)).save(any());
         verify(binanceData, times(1)).fetchOHLC(anyString(), any());
     }
 
     @Test
     void shouldNotSaveAnewSymbolIfItNotExistsInBinance() {
-        when(repository.existsById(anyString())).thenReturn(Mono.just(false));
+        when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(false));
         when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[0]));
 
         service.saveNewSymbol("BTCUSDT");
 
-        verify(repository, times(1)).existsById(anyString());
-        verify(repository, times(0)).save(any());
+        verify(oneDayRepository, times(1)).existsById(anyString());
+        verify(oneDayRepository, times(0)).save(any());
         verify(binanceData, times(1)).fetchOHLC(anyString(), any());
     }
 
     @Test
     void shouldSaveAnewSymbol() {
-        when(repository.existsById(anyString())).thenReturn(Mono.just(false));
+        when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(false));
         when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(2f, 3f, 3f, 4f)}));
-        when(repository.save(any())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.NONE, 0)));
+        when(oneDayRepository.save(any())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.NONE, 0)));
         service.saveNewSymbol("BTCUSDT");
 
-        verify(repository, times(1)).existsById(anyString());
-        verify(repository, times(1)).save(any());
+        verify(oneDayRepository, times(1)).existsById(anyString());
+        verify(oneDayRepository, times(1)).save(any());
         verify(binanceData, times(1)).fetchOHLC(anyString(), any());
     }
 
     @Test
     void shouldNotDeleteASymbolIfItDoesNotExists() {
-        when(repository.existsById(anyString())).thenReturn(Mono.just(false));
+        when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(false));
 
         service.deleteSymbol("BTCUSDT");
 
-        verify(repository, times(1)).existsById(anyString());
-        verify(repository, times(0)).deleteById(anyString());
+        verify(oneDayRepository, times(1)).existsById(anyString());
+        verify(oneDayRepository, times(0)).deleteById(anyString());
     }
 
     @Test
     void shouldDeleteASymbol() {
-        when(repository.existsById(anyString())).thenReturn(Mono.just(true));
-        when(repository.deleteById(anyString())).thenReturn(Mono.empty());
+        when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(true));
+        when(oneDayRepository.deleteById(anyString())).thenReturn(Mono.empty());
 
         service.deleteSymbol("BTCUSDT");
 
-        verify(repository, times(1)).existsById(anyString());
-        verify(repository, times(1)).deleteById(anyString());
+        verify(oneDayRepository, times(1)).existsById(anyString());
+        verify(oneDayRepository, times(1)).deleteById(anyString());
     }
 
     @Test
     void shouldNotRefreshASymbolIfItDoesNotExists() {
-        when(repository.findById(anyString())).thenReturn(Mono.empty());
+        when(oneDayRepository.findById(anyString())).thenReturn(Mono.empty());
 
         service.refresh("BTCUSDT");
 
-        verify(repository, times(1)).findById(anyString());
-        verify(repository, times(0)).save(any());
+        verify(oneDayRepository, times(1)).findById(anyString());
+        verify(oneDayRepository, times(0)).save(any());
     }
 
     @Test
     void shouldRefreshASymbol() {
-        when(repository.findById(anyString())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.SELL, 0)));
-        when(repository.save(any())).thenReturn(Mono.empty());
+        when(adapterService.closingPrices(any())).thenReturn(new float[]{23.3f});
+        when(oneDayRepository.findById(anyString())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.SELL, 0)));
+        when(oneDayRepository.save(any())).thenReturn(Mono.empty());
         when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f)}));
 
         service.refresh("BTCUSDT");
 
-        verify(repository, times(1)).findById(anyString());
-        verify(repository, times(1)).save(any());
+        verify(oneDayRepository, times(1)).findById(anyString());
+        verify(oneDayRepository, times(1)).save(any());
         verify(binanceData, times(1)).fetchOHLC(anyString(), any());
+        verify(adapterService, times(1)).closingPrices(any());
     }
 }
