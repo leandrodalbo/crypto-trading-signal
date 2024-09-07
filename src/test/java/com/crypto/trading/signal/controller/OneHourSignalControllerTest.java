@@ -13,7 +13,9 @@ import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.doNothing;
 
 @WebFluxTest(OneHourSignalController.class)
 public class OneHourSignalControllerTest {

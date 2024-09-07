@@ -2,7 +2,11 @@ package com.crypto.trading.signal.controller;
 
 import com.crypto.trading.signal.entity.OneHour;
 import com.crypto.trading.signal.service.OneHourSignalService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
