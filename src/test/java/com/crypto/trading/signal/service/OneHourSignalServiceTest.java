@@ -7,6 +7,7 @@ import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.repository.OneHourRepository;
 import com.crypto.trading.signal.service.adapter.AdapterService;
 import com.crypto.trading.signal.strategy.SmaStrategy;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +19,7 @@ import reactor.test.StepVerifier;
 
 import java.util.Random;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,6 +29,7 @@ import static org.mockito.Mockito.anyString;
 
 @ExtendWith(MockitoExtension.class)
 public class OneHourSignalServiceTest {
+
     @InjectMocks
     OneHourSignalService service;
 
@@ -109,6 +112,64 @@ public class OneHourSignalServiceTest {
 
         verify(oneHourRepository, times(1)).findById(anyString());
         verify(oneHourRepository, times(0)).save(any());
+    }
+
+    @Test
+    void shouldNotDeleteASymbolIfItDoesNotExists() {
+        when(oneHourRepository.existsById(anyString())).thenReturn(Mono.just(false));
+
+        assertThatThrownBy(() -> service.deleteSymbol("BTCUSDT"));
+
+        verify(oneHourRepository, times(1)).existsById(anyString());
+        verify(oneHourRepository, times(0)).deleteById(anyString());
+    }
+
+    @Test
+    void shouldDeleteASymbol() throws Exception {
+        when(oneHourRepository.existsById(anyString())).thenReturn(Mono.just(true));
+        when(oneHourRepository.deleteById(anyString())).thenReturn(Mono.empty());
+
+        service.deleteSymbol("BTCUSDT");
+
+        verify(oneHourRepository, times(1)).existsById(anyString());
+        verify(oneHourRepository, times(1)).deleteById(anyString());
+    }
+
+    @Test
+    void shouldNotSaveAnewSymbolIfItAlreadyExists() {
+        when(oneHourRepository.existsById(anyString())).thenReturn(Mono.just(true));
+        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[0]));
+
+        assertThatThrownBy(() -> service.saveNewSymbol("BTCUSDT"));
+
+        verify(oneHourRepository, times(1)).existsById(anyString());
+        verify(oneHourRepository, times(0)).save(any());
+        verify(binanceData, times(1)).fetchOHLC(anyString(), any());
+    }
+
+    @Test
+    void shouldNotSaveAnewSymbolIfItNotExistsInBinance() {
+        when(oneHourRepository.existsById(anyString())).thenReturn(Mono.just(false));
+        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[0]));
+
+        assertThatThrownBy(() -> service.saveNewSymbol("BTCUSDT"));
+
+        verify(oneHourRepository, times(1)).existsById(anyString());
+        verify(oneHourRepository, times(0)).save(any());
+        verify(binanceData, times(1)).fetchOHLC(anyString(), any());
+    }
+
+    @Test
+    void shouldSaveAnewSymbol() throws Exception {
+        when(oneHourRepository.existsById(anyString())).thenReturn(Mono.just(false));
+        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(2f, 3f, 3f, 4f)}));
+        when(oneHourRepository.save(any())).thenReturn(Mono.just(new OneHour("BTCUSDT", TradingSignal.NONE, 0)));
+
+        service.saveNewSymbol("BTCUSDT");
+
+        verify(oneHourRepository, times(1)).existsById(anyString());
+        verify(oneHourRepository, times(1)).save(any());
+        verify(binanceData, times(1)).fetchOHLC(anyString(), any());
     }
 
 }

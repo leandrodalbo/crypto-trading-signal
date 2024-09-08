@@ -42,7 +42,7 @@ public class OneDaySignalControllerTest {
 
     @Test
     void shouldSaveAnewSymbol() throws Exception {
-        given(service.saveNewSymbol(anyString())).willReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.NONE, 0)));
+        doNothing().when(service).saveNewSymbol(anyString());
 
         client.post()
                 .uri("/oneday/add/BTCUSDT")
@@ -55,7 +55,7 @@ public class OneDaySignalControllerTest {
 
     @Test
     void shouldDeleteASymbol() throws Exception {
-        given(service.deleteSymbol(anyString())).willReturn(Mono.empty());
+        doNothing().when(service).deleteSymbol(anyString());
 
         client.delete()
                 .uri("/oneday/delete/BTCUSDT")

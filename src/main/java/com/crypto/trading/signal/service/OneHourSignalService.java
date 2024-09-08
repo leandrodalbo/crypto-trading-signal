@@ -1,7 +1,10 @@
 package com.crypto.trading.signal.service;
 
+import com.crypto.trading.signal.entity.OneDay;
 import com.crypto.trading.signal.entity.OneHour;
 import com.crypto.trading.signal.fetchdata.BinanceData;
+import com.crypto.trading.signal.message.Message;
+import com.crypto.trading.signal.model.Candle;
 import com.crypto.trading.signal.model.Timeframe;
 import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.repository.OneHourRepository;
@@ -48,7 +51,6 @@ public class OneHourSignalService {
         refresh(oneHour);
     }
 
-
     public void randomRefresh() {
         List<OneHour> items = this.oneHourRepository.findAll()
                 .collectList()
@@ -65,6 +67,29 @@ public class OneHourSignalService {
         oneHourRepository.save(new OneHour(oneHour.symbol(), smaSignal, oneHour.version()))
                 .subscribe();
     }
+
+    public void saveNewSymbol(String symbol) throws Exception {
+        boolean symbolExists = Boolean.TRUE.equals(oneHourRepository.existsById(symbol).block());
+        Candle[] candles = binanceData.fetchOHLC(symbol, Timeframe.H1).block();
+
+        if (symbolExists)
+            throw new Exception(Message.SYMBOL_ALREADY_EXISTS.getMessage());
+
+        if (candles.length == 0)
+            throw new Exception(Message.INVALID_SYMBOL.getMessage());
+
+        oneHourRepository.save(new OneHour(symbol, TradingSignal.NONE, 0)).subscribe();
+    }
+
+    public void deleteSymbol(String symbol) throws Exception {
+        boolean symbolExists = Boolean.TRUE.equals(oneHourRepository.existsById(symbol).block());
+
+        if (!symbolExists)
+            throw new Exception(Message.INVALID_SYMBOL.getMessage());
+
+        oneHourRepository.deleteById(symbol).subscribe();
+    }
+
 
     private OneHour randomItem(List<OneHour> items) {
         return items.get(this.random.nextInt(0, items.size()));

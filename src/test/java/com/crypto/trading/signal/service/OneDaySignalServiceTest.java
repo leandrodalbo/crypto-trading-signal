@@ -18,6 +18,7 @@ import reactor.test.StepVerifier;
 
 import java.util.Random;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
@@ -92,7 +93,7 @@ public class OneDaySignalServiceTest {
         when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(true));
         when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[0]));
 
-        service.saveNewSymbol("BTCUSDT");
+        assertThatThrownBy(() -> service.saveNewSymbol("BTCUSDT"));
 
         verify(oneDayRepository, times(1)).existsById(anyString());
         verify(oneDayRepository, times(0)).save(any());
@@ -104,7 +105,7 @@ public class OneDaySignalServiceTest {
         when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(false));
         when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[0]));
 
-        service.saveNewSymbol("BTCUSDT");
+        assertThatThrownBy(() -> service.saveNewSymbol("BTCUSDT"));
 
         verify(oneDayRepository, times(1)).existsById(anyString());
         verify(oneDayRepository, times(0)).save(any());
@@ -112,10 +113,11 @@ public class OneDaySignalServiceTest {
     }
 
     @Test
-    void shouldSaveAnewSymbol() {
+    void shouldSaveAnewSymbol() throws Exception {
         when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(false));
         when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(2f, 3f, 3f, 4f)}));
         when(oneDayRepository.save(any())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.NONE, 0)));
+
         service.saveNewSymbol("BTCUSDT");
 
         verify(oneDayRepository, times(1)).existsById(anyString());
@@ -124,17 +126,17 @@ public class OneDaySignalServiceTest {
     }
 
     @Test
-    void shouldNotDeleteASymbolIfItDoesNotExists() {
+    void shouldNotDeleteASymbolIfItDoesNotExists() throws Exception {
         when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(false));
 
-        service.deleteSymbol("BTCUSDT");
+        assertThatThrownBy(() -> service.deleteSymbol("BTCUSDT"));
 
         verify(oneDayRepository, times(1)).existsById(anyString());
         verify(oneDayRepository, times(0)).deleteById(anyString());
     }
 
     @Test
-    void shouldDeleteASymbol() {
+    void shouldDeleteASymbol() throws Exception {
         when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(true));
         when(oneDayRepository.deleteById(anyString())).thenReturn(Mono.empty());
 
@@ -148,14 +150,14 @@ public class OneDaySignalServiceTest {
     void shouldNotRefreshASymbolIfItDoesNotExists() {
         when(oneDayRepository.findById(anyString())).thenReturn(Mono.empty());
 
-        service.refresh("BTCUSDT");
+        assertThatThrownBy(() -> service.refresh("BTCUSDT"));
 
         verify(oneDayRepository, times(1)).findById(anyString());
         verify(oneDayRepository, times(0)).save(any());
     }
 
     @Test
-    void shouldRefreshASymbol() {
+    void shouldRefreshASymbol() throws Exception {
         when(adapterService.closingPrices(any())).thenReturn(new float[]{23.3f});
         when(oneDayRepository.findById(anyString())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.SELL, 0)));
         when(oneDayRepository.save(any())).thenReturn(Mono.empty());

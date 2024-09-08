@@ -41,33 +41,33 @@ public class OneDaySignalService {
         return this.oneDayRepository.findById(symbol);
     }
 
-    public Mono<Object> saveNewSymbol(String symbol) {
+    public void saveNewSymbol(String symbol) throws Exception {
         boolean symbolExists = Boolean.TRUE.equals(oneDayRepository.existsById(symbol).block());
         Candle[] candles = binanceData.fetchOHLC(symbol, Timeframe.D1).block();
 
         if (symbolExists)
-            return Mono.just(Message.SYMBOL_ALREADY_EXISTS.getMessage());
+            throw new Exception(Message.SYMBOL_ALREADY_EXISTS.getMessage());
 
         if (candles.length == 0)
-            return Mono.just(Message.INVALID_SYMBOL.getMessage());
+            throw new Exception(Message.INVALID_SYMBOL.getMessage());
 
-        return Mono.just(oneDayRepository.save(new OneDay(symbol, TradingSignal.NONE, 0)).subscribe());
+        oneDayRepository.save(new OneDay(symbol, TradingSignal.NONE, 0)).subscribe();
     }
 
-    public Mono<Object> deleteSymbol(String symbol) {
+    public void deleteSymbol(String symbol) throws Exception {
         boolean symbolExists = Boolean.TRUE.equals(oneDayRepository.existsById(symbol).block());
 
         if (!symbolExists)
-            return Mono.just(Message.SYMBOL_NOT_EXISTS.getMessage());
+            throw new Exception(Message.INVALID_SYMBOL.getMessage());
 
-        return Mono.just(oneDayRepository.deleteById(symbol).subscribe());
+        oneDayRepository.deleteById(symbol).subscribe();
     }
 
-    public void refresh(String symbol) {
+    public void refresh(String symbol) throws Exception {
         OneDay oneDay = oneDayRepository.findById(symbol).block();
 
         if (oneDay == null)
-            return;
+            throw new Exception(Message.INVALID_SYMBOL.getMessage());
 
         refresh(oneDay);
     }
