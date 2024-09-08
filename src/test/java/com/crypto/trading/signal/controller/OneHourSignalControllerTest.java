@@ -64,4 +64,31 @@ public class OneHourSignalControllerTest {
 
         verify(service, times(1)).refresh(anyString());
     }
+
+    @Test
+    void shouldSaveAnewSymbol() throws Exception {
+        doNothing().when(service).saveNewSymbol(anyString());
+
+        client.post()
+                .uri("/onehour/add/BTCUSDT")
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        verify(service, times(1)).saveNewSymbol(anyString());
+    }
+
+    @Test
+    void shouldDeleteASymbol() throws Exception {
+        doNothing().when(service).deleteSymbol(anyString());
+
+        client.delete()
+                .uri("/onehour/delete/BTCUSDT")
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        verify(service, times(1)).deleteSymbol(anyString());
+    }
+
 }

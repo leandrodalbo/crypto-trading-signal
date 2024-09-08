@@ -23,27 +23,27 @@ public class OneDaySignalController {
     }
 
     @GetMapping("/all")
-    public Flux<OneDay> all() {
+    public Flux<OneDay> findAll() {
         return service.getAll();
     }
 
     @GetMapping("/{symbol}")
-    public Mono<OneDay> byId(@PathVariable String symbol) {
+    public Mono<OneDay> findById(@PathVariable String symbol) {
         return service.getById(symbol);
     }
 
     @PostMapping("/add/{symbol}")
-    public Mono<Object> add(@PathVariable String symbol) {
-        return service.saveNewSymbol(symbol);
+    public void addSymbol(@PathVariable String symbol) throws Exception {
+        service.saveNewSymbol(symbol);
     }
 
     @DeleteMapping("/delete/{symbol}")
-    public Mono<Object> delete(@PathVariable String symbol) {
-        return service.deleteSymbol(symbol);
+    public void deleteSymbol(@PathVariable String symbol) throws Exception {
+        service.deleteSymbol(symbol);
     }
 
     @PutMapping("/refresh/{symbol}")
-    public void refresh(@PathVariable String symbol) {
+    public void refreshSymbol(@PathVariable String symbol) throws Exception {
         service.refresh(symbol);
     }
 }
