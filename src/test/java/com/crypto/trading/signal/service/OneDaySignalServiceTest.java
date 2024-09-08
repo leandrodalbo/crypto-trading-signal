@@ -1,12 +1,15 @@
 package com.crypto.trading.signal.service;
 
 import com.crypto.trading.signal.entity.OneDay;
+import com.crypto.trading.signal.errorhandler.exeptions.InvalidSymbolException;
+import com.crypto.trading.signal.errorhandler.exeptions.SymbolAlreadyExistsException;
 import com.crypto.trading.signal.fetchdata.BinanceData;
 import com.crypto.trading.signal.model.Candle;
 import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.repository.OneDayRepository;
 import com.crypto.trading.signal.service.adapter.AdapterService;
 import com.crypto.trading.signal.strategy.SmaStrategy;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,7 +21,6 @@ import reactor.test.StepVerifier;
 
 import java.util.Random;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
@@ -93,7 +95,8 @@ public class OneDaySignalServiceTest {
         when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(true));
         when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[0]));
 
-        assertThatThrownBy(() -> service.saveNewSymbol("BTCUSDT"));
+        Assertions.assertThatExceptionOfType(SymbolAlreadyExistsException.class)
+                .isThrownBy(() -> service.saveNewSymbol("BTCUSDT"));
 
         verify(oneDayRepository, times(1)).existsById(anyString());
         verify(oneDayRepository, times(0)).save(any());
@@ -105,7 +108,8 @@ public class OneDaySignalServiceTest {
         when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(false));
         when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[0]));
 
-        assertThatThrownBy(() -> service.saveNewSymbol("BTCUSDT"));
+        Assertions.assertThatExceptionOfType(InvalidSymbolException.class)
+                .isThrownBy(() -> service.saveNewSymbol("BTCUSDT"));
 
         verify(oneDayRepository, times(1)).existsById(anyString());
         verify(oneDayRepository, times(0)).save(any());
@@ -129,7 +133,8 @@ public class OneDaySignalServiceTest {
     void shouldNotDeleteASymbolIfItDoesNotExists() throws Exception {
         when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(false));
 
-        assertThatThrownBy(() -> service.deleteSymbol("BTCUSDT"));
+        Assertions.assertThatExceptionOfType(InvalidSymbolException.class)
+                .isThrownBy(() -> service.deleteSymbol("BTCUSDT"));
 
         verify(oneDayRepository, times(1)).existsById(anyString());
         verify(oneDayRepository, times(0)).deleteById(anyString());
@@ -150,7 +155,8 @@ public class OneDaySignalServiceTest {
     void shouldNotRefreshASymbolIfItDoesNotExists() {
         when(oneDayRepository.findById(anyString())).thenReturn(Mono.empty());
 
-        assertThatThrownBy(() -> service.refresh("BTCUSDT"));
+        Assertions.assertThatExceptionOfType(InvalidSymbolException.class)
+                .isThrownBy(() -> service.refresh("BTCUSDT"));
 
         verify(oneDayRepository, times(1)).findById(anyString());
         verify(oneDayRepository, times(0)).save(any());
