@@ -1,6 +1,7 @@
 package com.crypto.trading.signal.controller;
 
 import com.crypto.trading.signal.entity.OneHour;
+import com.crypto.trading.signal.errorhandler.exeptions.InvalidSymbolException;
 import com.crypto.trading.signal.service.OneHourSignalService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +34,7 @@ public class OneHourSignalController {
     }
 
     @PutMapping("/refresh/{symbol}")
-    public void refreshSymbol(@PathVariable String symbol) {
+    public void refreshSymbol(@PathVariable String symbol) throws InvalidSymbolException {
         service.refresh(symbol);
     }
 

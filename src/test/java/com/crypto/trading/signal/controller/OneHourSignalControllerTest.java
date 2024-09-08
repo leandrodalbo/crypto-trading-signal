@@ -1,6 +1,8 @@
 package com.crypto.trading.signal.controller;
 
 import com.crypto.trading.signal.entity.OneHour;
+import com.crypto.trading.signal.errorhandler.exeptions.InvalidSymbolException;
+import com.crypto.trading.signal.errorhandler.exeptions.SymbolAlreadyExistsException;
 import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.service.OneHourSignalService;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+
 
 @WebFluxTest(OneHourSignalController.class)
 public class OneHourSignalControllerTest {
@@ -66,6 +70,19 @@ public class OneHourSignalControllerTest {
     }
 
     @Test
+    void shouldNotRefreshASymbolIfItDoesNotExists() throws Exception {
+        doThrow(InvalidSymbolException.class).when(service).refresh(anyString());
+
+        client.put()
+                .uri("/onehour/refresh/BTCUSDT")
+                .exchange()
+                .expectStatus()
+                .is4xxClientError();
+
+        verify(service, times(1)).refresh(anyString());
+    }
+
+    @Test
     void shouldSaveAnewSymbol() throws Exception {
         doNothing().when(service).saveNewSymbol(anyString());
 
@@ -79,6 +96,32 @@ public class OneHourSignalControllerTest {
     }
 
     @Test
+    void shouldNotSaveASymbolIfItAlreadyExists() throws Exception {
+        doThrow(SymbolAlreadyExistsException.class).when(service).saveNewSymbol(anyString());
+
+        client.post()
+                .uri("/onehour/add/BTCUSDT")
+                .exchange()
+                .expectStatus()
+                .is4xxClientError();
+
+        verify(service, times(1)).saveNewSymbol(anyString());
+    }
+
+    @Test
+    void shouldNotSaveASymbolIfItIsNotOnBinance() throws Exception {
+        doThrow(InvalidSymbolException.class).when(service).saveNewSymbol(anyString());
+
+        client.post()
+                .uri("/onehour/add/BTCUSDT")
+                .exchange()
+                .expectStatus()
+                .is4xxClientError();
+
+        verify(service, times(1)).saveNewSymbol(anyString());
+    }
+
+    @Test
     void shouldDeleteASymbol() throws Exception {
         doNothing().when(service).deleteSymbol(anyString());
 
@@ -87,6 +130,19 @@ public class OneHourSignalControllerTest {
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful();
+
+        verify(service, times(1)).deleteSymbol(anyString());
+    }
+
+    @Test
+    void shouldGetAnErrorIfTheSymbolDoesNotExists() throws Exception {
+        doThrow(InvalidSymbolException.class).when(service).deleteSymbol(anyString());
+
+        client.delete()
+                .uri("/onehour/delete/BTCUSDT")
+                .exchange()
+                .expectStatus()
+                .is4xxClientError();
 
         verify(service, times(1)).deleteSymbol(anyString());
     }

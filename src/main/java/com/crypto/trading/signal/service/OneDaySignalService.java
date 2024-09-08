@@ -1,8 +1,9 @@
 package com.crypto.trading.signal.service;
 
 import com.crypto.trading.signal.entity.OneDay;
+import com.crypto.trading.signal.errorhandler.exeptions.InvalidSymbolException;
+import com.crypto.trading.signal.errorhandler.exeptions.SymbolAlreadyExistsException;
 import com.crypto.trading.signal.fetchdata.BinanceData;
-import com.crypto.trading.signal.message.Message;
 import com.crypto.trading.signal.model.Candle;
 import com.crypto.trading.signal.model.Timeframe;
 import com.crypto.trading.signal.model.TradingSignal;
@@ -41,33 +42,33 @@ public class OneDaySignalService {
         return this.oneDayRepository.findById(symbol);
     }
 
-    public void saveNewSymbol(String symbol) throws Exception {
+    public void saveNewSymbol(String symbol) throws InvalidSymbolException, SymbolAlreadyExistsException {
         boolean symbolExists = Boolean.TRUE.equals(oneDayRepository.existsById(symbol).block());
         Candle[] candles = binanceData.fetchOHLC(symbol, Timeframe.D1).block();
 
         if (symbolExists)
-            throw new Exception(Message.SYMBOL_ALREADY_EXISTS.getMessage());
+            throw new SymbolAlreadyExistsException();
 
         if (candles.length == 0)
-            throw new Exception(Message.INVALID_SYMBOL.getMessage());
+            throw new InvalidSymbolException();
 
         oneDayRepository.save(new OneDay(symbol, TradingSignal.NONE, 0)).subscribe();
     }
 
-    public void deleteSymbol(String symbol) throws Exception {
+    public void deleteSymbol(String symbol) throws InvalidSymbolException {
         boolean symbolExists = Boolean.TRUE.equals(oneDayRepository.existsById(symbol).block());
 
         if (!symbolExists)
-            throw new Exception(Message.INVALID_SYMBOL.getMessage());
+            throw new InvalidSymbolException();
 
         oneDayRepository.deleteById(symbol).subscribe();
     }
 
-    public void refresh(String symbol) throws Exception {
+    public void refresh(String symbol) throws InvalidSymbolException {
         OneDay oneDay = oneDayRepository.findById(symbol).block();
 
         if (oneDay == null)
-            throw new Exception(Message.INVALID_SYMBOL.getMessage());
+            throw new InvalidSymbolException();
 
         refresh(oneDay);
     }

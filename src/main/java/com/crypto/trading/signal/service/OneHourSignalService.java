@@ -1,9 +1,9 @@
 package com.crypto.trading.signal.service;
 
-import com.crypto.trading.signal.entity.OneDay;
 import com.crypto.trading.signal.entity.OneHour;
+import com.crypto.trading.signal.errorhandler.exeptions.InvalidSymbolException;
+import com.crypto.trading.signal.errorhandler.exeptions.SymbolAlreadyExistsException;
 import com.crypto.trading.signal.fetchdata.BinanceData;
-import com.crypto.trading.signal.message.Message;
 import com.crypto.trading.signal.model.Candle;
 import com.crypto.trading.signal.model.Timeframe;
 import com.crypto.trading.signal.model.TradingSignal;
@@ -42,11 +42,11 @@ public class OneHourSignalService {
         return oneHourRepository.findAll();
     }
 
-    public void refresh(String symbol) {
+    public void refresh(String symbol) throws InvalidSymbolException {
         OneHour oneHour = oneHourRepository.findById(symbol).block();
 
         if (oneHour == null)
-            return;
+            throw new InvalidSymbolException();
 
         refresh(oneHour);
     }
@@ -68,24 +68,24 @@ public class OneHourSignalService {
                 .subscribe();
     }
 
-    public void saveNewSymbol(String symbol) throws Exception {
+    public void saveNewSymbol(String symbol) throws InvalidSymbolException, SymbolAlreadyExistsException {
         boolean symbolExists = Boolean.TRUE.equals(oneHourRepository.existsById(symbol).block());
         Candle[] candles = binanceData.fetchOHLC(symbol, Timeframe.H1).block();
 
         if (symbolExists)
-            throw new Exception(Message.SYMBOL_ALREADY_EXISTS.getMessage());
+            throw new SymbolAlreadyExistsException();
 
         if (candles.length == 0)
-            throw new Exception(Message.INVALID_SYMBOL.getMessage());
+            throw new InvalidSymbolException();
 
         oneHourRepository.save(new OneHour(symbol, TradingSignal.NONE, 0)).subscribe();
     }
 
-    public void deleteSymbol(String symbol) throws Exception {
+    public void deleteSymbol(String symbol) throws InvalidSymbolException {
         boolean symbolExists = Boolean.TRUE.equals(oneHourRepository.existsById(symbol).block());
 
         if (!symbolExists)
-            throw new Exception(Message.INVALID_SYMBOL.getMessage());
+            throw new InvalidSymbolException();
 
         oneHourRepository.deleteById(symbol).subscribe();
     }
