@@ -16,6 +16,8 @@ spring:
 sma:
   shortPeriod: 9
   longPeriod: 21
+rsi:
+  period: 14
 
 crypto-data:
   apiEndpoint: https://api.binance.com
