@@ -9,6 +9,7 @@ public class RSIStrategy {
 
     private static final int SELL_ZONE = 70;
     private static final int BUY_ZONE = 30;
+
     private final RelativeStrengthIndex indicator;
 
     public RSIStrategy(RelativeStrengthIndex rsi) {
