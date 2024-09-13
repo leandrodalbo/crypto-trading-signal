@@ -18,6 +18,9 @@ sma:
   longPeriod: 21
 rsi:
   period: 14
+bbands:
+  period: 20
+  stddev: 2
 
 crypto-data:
   apiEndpoint: https://api.binance.com
