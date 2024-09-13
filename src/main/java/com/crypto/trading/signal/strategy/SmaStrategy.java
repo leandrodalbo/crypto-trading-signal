@@ -18,37 +18,17 @@ public class SmaStrategy {
         double[] shortMAs = sma.shortSma(values);
         double[] longMAs = sma.longSma(values);
 
-        if (shortMAs[shortMAs.length - 1] >= longMAs[longMAs.length - 1]) {
-            int i = shortMAs.length - 2;
-            int j = longMAs.length - 2;
-            int count = 0;
-
-            while (count < LAST_TEN) {
-                if (shortMAs[i] < longMAs[j]) {
-                    return TradingSignal.BUY;
-                }
-                i--;
-                j--;
-                count++;
-            }
+        if (shortMAs[shortMAs.length - 3] < longMAs[longMAs.length - 3] &&
+                shortMAs[shortMAs.length - 1] > longMAs[longMAs.length - 1]
+        ) {
+            return TradingSignal.BUY;
         }
 
-        if (shortMAs[shortMAs.length - 1] < longMAs[longMAs.length - 1]) {
-            int i = shortMAs.length - 2;
-            int j = longMAs.length - 2;
-            int count = 0;
-
-            while (count < LAST_TEN) {
-                if (shortMAs[i] > longMAs[j]) {
-                    return TradingSignal.SELL;
-                }
-                i--;
-                j--;
-                count++;
-            }
-
+        if (shortMAs[shortMAs.length - 3] > longMAs[longMAs.length - 3] &&
+                shortMAs[shortMAs.length - 1] < longMAs[longMAs.length - 1]
+        ) {
+            return TradingSignal.SELL;
         }
-
         return TradingSignal.NONE;
     }
 }
