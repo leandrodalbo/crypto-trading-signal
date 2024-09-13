@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RelativeStrengthIndexTest {
 
-    RelativeStrengthIndex rsi = new RelativeStrengthIndex(new Core());
+    RelativeStrengthIndex rsi = new RelativeStrengthIndex(new Core(), new ZeroCleaner());
 
     @Test
     void willCalculateRSIValues() {

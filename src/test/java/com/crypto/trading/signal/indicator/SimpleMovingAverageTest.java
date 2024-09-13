@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleMovingAverageTest {
 
-    SimpleMovingAverage sma = new SimpleMovingAverage(new Core());
+    SimpleMovingAverage sma = new SimpleMovingAverage(new Core(), new ZeroCleaner());
 
     @Test
     void willCalculateShortMAs() {
