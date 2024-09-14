@@ -1,21 +1,21 @@
 package com.crypto.trading.signal.strategy;
 
-import com.crypto.trading.signal.indicator.SimpleMovingAverage;
+import com.crypto.trading.signal.indicator.ExponentialMovingAverage;
 import com.crypto.trading.signal.model.TradingSignal;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SmaStrategy {
+public class EmaStrategy {
 
-    private final SimpleMovingAverage sma;
+    private final ExponentialMovingAverage ema;
 
-    public SmaStrategy(SimpleMovingAverage sma) {
-        this.sma = sma;
+    public EmaStrategy(ExponentialMovingAverage ema) {
+        this.ema = ema;
     }
 
-    public TradingSignal smaSignal(float[] values) {
-        double[] shortMAs = sma.shortSma(values);
-        double[] longMAs = sma.longSma(values);
+    public TradingSignal emaSignal(float[] values) {
+        double[] shortMAs = ema.shortEma(values);
+        double[] longMAs = ema.longEma(values);
 
         if (shortMAs[shortMAs.length - 3] < longMAs[longMAs.length - 3] &&
                 shortMAs[shortMAs.length - 1] > longMAs[longMAs.length - 1]

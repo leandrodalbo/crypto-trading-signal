@@ -1,4 +1,4 @@
-    package com.crypto.trading.signal.indicator;
+package com.crypto.trading.signal.indicator;
 
 import com.tictactec.ta.lib.Core;
 import com.tictactec.ta.lib.MAType;
@@ -11,38 +11,56 @@ import java.util.Map;
 @Component
 public class StochasticIndicator {
 
-    public static final String UPPER_BAND_KEY = "UPPER";
-    public static final String MIDDLE_BAND_KEY = "MIDDLE";
-    public static final String LOWER_BAND_KEY = "LOWER";
-    private static final int DEFAULT_PERIOD = 20;
-    private static final double STD_DEV = 2;
+    public static final String STOCH_k_KEY = "K";
+    public static final String STOCH_D_KEY = "D";
+
+    private static final int DEFAULT_FAST_K_PERIOD = 14;
+    private static final int DEFAULT_SLOW_K_PERIOD = 3;
+    private static final int DEFAULT_SLOW_D_PERIOD = 3;
+
     private final Core core;
     private final ZeroCleaner zeroCleaner;
 
-    @Value("${bbands.period}")
-    private int bandsPeriod;
-    @Value("${bbands.stddev}")
-    private double stdDev;
+    @Value("${stoch.fastKPerdiod}")
+    private int fastKPeriod;
+
+    @Value("${stoch.slowKPerdiod}")
+    private int slowKPeriod;
+
+    @Value("${stoch.slowDPerdiod}")
+    private int slowDPeriod;
 
     public StochasticIndicator(Core core, ZeroCleaner zeroCleaner) {
         this.core = core;
         this.zeroCleaner = zeroCleaner;
     }
 
-    public Map<String, Double> bands(float[] values) {
-        int period = (bandsPeriod != 0) ? bandsPeriod : DEFAULT_PERIOD;
-        double upAndDown = (stdDev != 0) ? stdDev : STD_DEV;
+    public Map<String, double[]> stochasticValues(float[] high, float[] low, float[] close) {
+        int fastK = (fastKPeriod != 0) ? fastKPeriod : DEFAULT_FAST_K_PERIOD;
+        int slowK = (slowKPeriod != 0) ? slowKPeriod : DEFAULT_SLOW_K_PERIOD;
+        int slowD = (slowDPeriod != 0) ? slowDPeriod : DEFAULT_SLOW_D_PERIOD;
 
-        double[] upperBand = new double[values.length];
-        double[] middleBand = new double[values.length];
-        double[] lowerBand = new double[values.length];
+        double[] stochasticK = new double[high.length];
+        double[] stochasticD = new double[high.length];
 
-        core.bbands(0, values.length - 1, values, period, upAndDown, upAndDown, MAType.Sma, new MInteger(), new MInteger(), upperBand, middleBand, lowerBand);
+        core.stoch(0,
+                high.length - 1,
+                high,
+                low,
+                close,
+                fastK,
+                slowK,
+                MAType.Sma,
+                slowD,
+                MAType.Sma,
+                new MInteger(),
+                new MInteger(),
+                stochasticK,
+                stochasticD);
 
-        upperBand = zeroCleaner.cleanUp(upperBand);
-        middleBand = zeroCleaner.cleanUp(middleBand);
-        lowerBand = zeroCleaner.cleanUp(lowerBand);
+        stochasticK = zeroCleaner.cleanUp(stochasticK);
+        stochasticD = zeroCleaner.cleanUp(stochasticD);
 
-        return Map.of(UPPER_BAND_KEY, upperBand[upperBand.length - 1], MIDDLE_BAND_KEY, middleBand[middleBand.length - 1], LOWER_BAND_KEY, lowerBand[lowerBand.length - 1]);
+        return Map.of(STOCH_k_KEY, stochasticK, STOCH_D_KEY, stochasticD);
     }
 }

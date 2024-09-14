@@ -14,7 +14,7 @@ public class OnBalanceVolume {
     public static final String OBV_KEY = "OBV";
     public static final String OBV_MA_KEY = "OBV_MA";
 
-    private static final int MA_PERIOD = 20;
+    private static final int MA_PERIOD = 14;
 
     private final Core core;
     private final ZeroCleaner zeroCleaner;
