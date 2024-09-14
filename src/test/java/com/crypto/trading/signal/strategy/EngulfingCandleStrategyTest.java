@@ -12,9 +12,9 @@ public class EngulfingCandleStrategyTest {
     @Test
     void shouldFindABullishPatternBetweenTheFirstASecond() {
         Candle[] candles = new Candle[]{
-                Candle.of(2f, 2.5f, 1.2f, 1.5f),
-                Candle.of(1.4f, 3.0f, 1.2f, 2.1f),
-                Candle.of(0.9f, 5.0f, 0.8f, 2.5f),
+                Candle.of(2f, 2.5f, 1.2f, 1.5f, 232),
+                Candle.of(1.4f, 3.0f, 1.2f, 2.1f, 232),
+                Candle.of(0.9f, 5.0f, 0.8f, 2.5f, 232),
         };
         assertThat(strategy.engulfingSignal(candles)).isEqualTo(TradingSignal.BUY);
     }
@@ -22,9 +22,9 @@ public class EngulfingCandleStrategyTest {
     @Test
     void shouldFindABullishPatternBetweenTheSecondAndLast() {
         Candle[] candles = new Candle[]{
-                Candle.of(1.1f, 2.2f, 1f, 1.0f),
-                Candle.of(3.1f, 3.5f, 2.3f, 2.4f),
-                Candle.of(2.1f, 3.4f, 1.9f, 3.2f),
+                Candle.of(1.1f, 2.2f, 1f, 1.0f, 232),
+                Candle.of(3.1f, 3.5f, 2.3f, 2.4f, 232),
+                Candle.of(2.1f, 3.4f, 1.9f, 3.2f, 232),
         };
         assertThat(strategy.engulfingSignal(candles)).isEqualTo(TradingSignal.BUY);
     }
@@ -32,9 +32,9 @@ public class EngulfingCandleStrategyTest {
     @Test
     void shouldFindABearishPatternBetweenTheFirstASecond() {
         Candle[] candles = new Candle[]{
-                Candle.of(2f, 2.5f, 1.2f, 2.5f),
-                Candle.of(2.8f, 3.0f, 1.2f, 1.9f),
-                Candle.of(0.9f, 5.0f, 0.8f, 2.5f),
+                Candle.of(2f, 2.5f, 1.2f, 2.5f, 232),
+                Candle.of(2.8f, 3.0f, 1.2f, 1.9f, 232),
+                Candle.of(0.9f, 5.0f, 0.8f, 2.5f, 232),
         };
         assertThat(strategy.engulfingSignal(candles)).isEqualTo(TradingSignal.SELL);
     }
@@ -42,9 +42,9 @@ public class EngulfingCandleStrategyTest {
     @Test
     void shouldFindABearishPatternBetweenTheSecondAndLast() {
         Candle[] candles = new Candle[]{
-                Candle.of(1.1f, 2.2f, 1f, 1.0f),
-                Candle.of(3.1f, 3.5f, 2.3f, 3.6f),
-                Candle.of(4.1f, 3.4f, 1.9f, 3.0f),
+                Candle.of(1.1f, 2.2f, 1f, 1.0f, 232),
+                Candle.of(3.1f, 3.5f, 2.3f, 3.6f, 232),
+                Candle.of(4.1f, 3.4f, 1.9f, 3.0f, 232),
         };
         assertThat(strategy.engulfingSignal(candles)).isEqualTo(TradingSignal.SELL);
     }

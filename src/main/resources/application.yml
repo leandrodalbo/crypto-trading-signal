@@ -25,6 +25,8 @@ macd:
   fastPeriod: 12
   slowPeriod: 26
   signalPeriod: 9
+obv:
+  maperiod: 14
 
 crypto-data:
   apiEndpoint: https://api.binance.com

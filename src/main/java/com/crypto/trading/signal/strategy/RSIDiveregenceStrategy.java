@@ -16,11 +16,11 @@ public class RSIDiveregenceStrategy {
     public TradingSignal rsiDivergenceSignal(float[] values) {
         double[] rsiValues = this.indicator.rsi(values);
 
-        if (values[values.length - 10] > values[values.length - 5] && values[values.length - 5] > values[values.length - 1] && rsiValues[rsiValues.length - 10] < rsiValues[rsiValues.length - 5] && rsiValues[rsiValues.length - 5] < rsiValues[rsiValues.length - 1]) {
+        if (values[values.length - 5] > values[values.length - 3] && values[values.length - 3] > values[values.length - 1] && rsiValues[rsiValues.length - 5] < rsiValues[rsiValues.length - 3] && rsiValues[rsiValues.length - 3] < rsiValues[rsiValues.length - 1]) {
             return TradingSignal.BUY;
         }
 
-        if (values[values.length - 10] < values[values.length - 5] && values[values.length - 5] < values[values.length - 1] && rsiValues[rsiValues.length - 10] > rsiValues[rsiValues.length - 5] && rsiValues[rsiValues.length - 5] > rsiValues[rsiValues.length - 1]) {
+        if (values[values.length - 5] < values[values.length - 3] && values[values.length - 3] < values[values.length - 1] && rsiValues[rsiValues.length - 5] > rsiValues[rsiValues.length - 3] && rsiValues[rsiValues.length - 3] > rsiValues[rsiValues.length - 1]) {
             return TradingSignal.SELL;
         }
 

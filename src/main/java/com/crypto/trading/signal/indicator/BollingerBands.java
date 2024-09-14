@@ -18,6 +18,7 @@ public class BollingerBands {
     private static final double STD_DEV = 2;
     private final Core core;
     private final ZeroCleaner zeroCleaner;
+
     @Value("${bbands.period}")
     private int bandsPeriod;
     @Value("${bbands.stddev}")

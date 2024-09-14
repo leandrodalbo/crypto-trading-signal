@@ -40,7 +40,9 @@ public class BinanceData {
                     Float.parseFloat((String) candle.get(1)),
                     Float.parseFloat((String) candle.get(2)),
                     Float.parseFloat((String) candle.get(3)),
-                    Float.parseFloat((String) candle.get(4)));
+                    Float.parseFloat((String) candle.get(4)),
+                    Integer.parseInt((String) candle.get(5))
+            );
 
         }
 

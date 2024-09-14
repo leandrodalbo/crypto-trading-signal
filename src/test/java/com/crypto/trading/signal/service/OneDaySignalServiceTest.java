@@ -76,7 +76,7 @@ public class OneDaySignalServiceTest {
     void randomRefresh() {
         when(adapterService.closingPrices(any())).thenReturn(new float[]{23.3f});
         when(oneDayRepository.findAll()).thenReturn(Flux.just(new OneDay("BTCUSDT", TradingSignal.SELL, 0)));
-        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f)}));
+        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f, 232)}));
         when(smaStrategy.smaSignal(any())).thenReturn(TradingSignal.BUY);
         when(oneDayRepository.save(any())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.BUY, 0)));
         when(random.nextInt(0, 1)).thenReturn(0);
@@ -119,7 +119,7 @@ public class OneDaySignalServiceTest {
     @Test
     void shouldSaveAnewSymbol() throws Exception {
         when(oneDayRepository.existsById(anyString())).thenReturn(Mono.just(false));
-        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(2f, 3f, 3f, 4f)}));
+        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(2f, 3f, 3f, 4f, 232)}));
         when(oneDayRepository.save(any())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.NONE, 0)));
 
         service.saveNewSymbol("BTCUSDT");
@@ -167,7 +167,7 @@ public class OneDaySignalServiceTest {
         when(adapterService.closingPrices(any())).thenReturn(new float[]{23.3f});
         when(oneDayRepository.findById(anyString())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.SELL, 0)));
         when(oneDayRepository.save(any())).thenReturn(Mono.empty());
-        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f)}));
+        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f, 232)}));
 
         service.refresh("BTCUSDT");
 

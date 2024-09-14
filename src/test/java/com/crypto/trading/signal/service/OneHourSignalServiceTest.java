@@ -78,7 +78,7 @@ public class OneHourSignalServiceTest {
         when(adapterService.closingPrices(any())).thenReturn(new float[]{23.3f});
         when(oneHourRepository.findById(anyString())).thenReturn(Mono.just(new OneHour("BTCUSDT", TradingSignal.SELL, 0)));
         when(oneHourRepository.save(any())).thenReturn(Mono.empty());
-        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f)}));
+        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f, 232)}));
 
         service.refresh("BTCUSDT");
 
@@ -92,7 +92,7 @@ public class OneHourSignalServiceTest {
     void randomRefresh() {
         when(adapterService.closingPrices(any())).thenReturn(new float[]{23.3f});
         when(oneHourRepository.findAll()).thenReturn(Flux.just(new OneHour("BTCUSDT", TradingSignal.SELL, 0)));
-        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f)}));
+        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f, 232)}));
         when(smaStrategy.smaSignal(any())).thenReturn(TradingSignal.BUY);
         when(oneHourRepository.save(any())).thenReturn(Mono.just(new OneHour("BTCUSDT", TradingSignal.BUY, 0)));
         when(random.nextInt(0, 1)).thenReturn(0);
@@ -168,7 +168,7 @@ public class OneHourSignalServiceTest {
     @Test
     void shouldSaveAnewSymbol() throws Exception {
         when(oneHourRepository.existsById(anyString())).thenReturn(Mono.just(false));
-        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(2f, 3f, 3f, 4f)}));
+        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(2f, 3f, 3f, 4f, 232)}));
         when(oneHourRepository.save(any())).thenReturn(Mono.just(new OneHour("BTCUSDT", TradingSignal.NONE, 0)));
 
         service.saveNewSymbol("BTCUSDT");

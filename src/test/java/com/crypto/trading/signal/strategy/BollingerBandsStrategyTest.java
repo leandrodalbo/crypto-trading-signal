@@ -1,7 +1,6 @@
 package com.crypto.trading.signal.strategy;
 
 import com.crypto.trading.signal.indicator.BollingerBands;
-import com.crypto.trading.signal.indicator.RelativeStrengthIndex;
 import com.crypto.trading.signal.model.TradingSignal;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

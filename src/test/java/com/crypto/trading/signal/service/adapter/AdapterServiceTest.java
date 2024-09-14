@@ -13,7 +13,7 @@ public class AdapterServiceTest {
 
     @Test
     public void willReturnAnArrayWithTheClosingPrices() {
-        assertThat(adapterService.closingPrices(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f)})))
+        assertThat(adapterService.closingPrices(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f, 232)})))
                 .isEqualTo(new float[]{23.3f});
     }
 }
