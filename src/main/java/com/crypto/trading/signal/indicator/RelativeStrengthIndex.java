@@ -12,6 +12,7 @@ public class RelativeStrengthIndex {
 
     private final Core core;
     private final ZeroCleaner zeroCleaner;
+
     @Value("${rsi.period}")
     private int rsiPeriod;
 
@@ -22,6 +23,7 @@ public class RelativeStrengthIndex {
 
     public double[] rsi(float[] values) {
         int period = (rsiPeriod != 0) ? rsiPeriod : DEFAULT_PERIOD;
+
         double[] result = new double[values.length];
 
         core.rsi(0, values.length - 1, values, period, new MInteger(), new MInteger(), result);

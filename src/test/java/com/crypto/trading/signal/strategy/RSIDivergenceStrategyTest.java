@@ -24,25 +24,25 @@ public class RSIDivergenceStrategyTest {
     @Test
     void willIdentifyABuyingSignal() {
         given(rsi.rsi(any())).willReturn(new double[]{
-                22, 24, 26, 31, 33, 35, 40, 41, 42, 49, 52, 53, 59, 60, 61
+                52, 53, 59, 60, 61
         });
-        assertThat(strategy.rsiDivergenceSignal(new float[]{21, 19, 16, 15, 14, 15, 14, 11, 10, 9, 9})).isEqualTo(TradingSignal.BUY);
+        assertThat(strategy.rsiDivergenceSignal(new float[]{14, 11, 10, 9, 9})).isEqualTo(TradingSignal.BUY);
     }
 
     @Test
     void willIdentifySellingSignal() {
         given(rsi.rsi(any())).willReturn(new double[]{
-                55, 55, 44, 43, 44, 33, 33, 31, 26, 22, 22
+                33, 31, 26, 22, 22
         });
-        assertThat(strategy.rsiDivergenceSignal(new float[]{10, 11, 10, 11, 14, 15, 16, 18, 22, 25, 25})).isEqualTo(TradingSignal.SELL);
+        assertThat(strategy.rsiDivergenceSignal(new float[]{16, 18, 22, 25, 25})).isEqualTo(TradingSignal.SELL);
     }
 
     @Test
     void willIdentifyThereIsNoSignal() {
         given(rsi.rsi(any())).willReturn(new double[]{
-                22, 22, 22, 33, 26, 22, 22, 25, 26, 22, 22
+                22, 25, 26, 22, 22
         });
-        assertThat(strategy.rsiDivergenceSignal(new float[]{10, 11, 10, 11, 14, 15, 16, 18, 22, 25, 25})).isEqualTo(TradingSignal.NONE);
+        assertThat(strategy.rsiDivergenceSignal(new float[]{16, 18, 22, 25, 25})).isEqualTo(TradingSignal.NONE);
 
     }
 }
