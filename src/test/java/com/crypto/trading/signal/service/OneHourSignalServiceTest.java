@@ -88,6 +88,4 @@ public class OneHourSignalServiceTest {
         verify(oneHourRepository, times(1)).findById(anyString());
         verify(oneHourRepository, times(0)).save(any());
     }
-
-
 }
