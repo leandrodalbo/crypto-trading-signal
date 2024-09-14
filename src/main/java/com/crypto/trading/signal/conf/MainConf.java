@@ -3,6 +3,7 @@ package com.crypto.trading.signal.conf;
 import com.tictactec.ta.lib.Core;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Random;
 
@@ -10,12 +11,12 @@ import java.util.Random;
 public class MainConf {
 
     @Bean
-    public Core indicatorCore() {
-        return new Core();
+    WebClient webClient(WebClient.Builder builder, CryptoDataConf dataConf) {
+        return builder.baseUrl(dataConf.apiEndpoint()).build();
     }
 
     @Bean
-    public Random random() {
-        return new Random();
+    public Core indicatorCore() {
+        return new Core();
     }
 }

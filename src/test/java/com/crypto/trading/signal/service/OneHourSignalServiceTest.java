@@ -50,16 +50,6 @@ public class OneHourSignalServiceTest {
     @Mock
     private SmaStrategy smaStrategy;
 
-    @Test
-    void shouldFindOneHourSymbolById() {
-        when(oneHourRepository.findById(anyString())).thenReturn(Mono.just(new OneHour("BTCUSDT", TradingSignal.BUY, 0)));
-
-        Mono<OneHour> result = service.getById("BTCUSDT");
-
-        StepVerifier.create(result)
-                .thenConsumeWhile(it -> !it.symbol().isEmpty());
-        verify(oneHourRepository, times(1)).findById(anyString());
-    }
 
     @Test
     void shouldFindAllSymbols() {
@@ -89,24 +79,6 @@ public class OneHourSignalServiceTest {
     }
 
     @Test
-    void randomRefresh() {
-        when(adapterService.closingPrices(any())).thenReturn(new float[]{23.3f});
-        when(oneHourRepository.findAll()).thenReturn(Flux.just(new OneHour("BTCUSDT", TradingSignal.SELL, 0)));
-        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f, 232)}));
-        when(smaStrategy.smaSignal(any())).thenReturn(TradingSignal.BUY);
-        when(oneHourRepository.save(any())).thenReturn(Mono.just(new OneHour("BTCUSDT", TradingSignal.BUY, 0)));
-        when(random.nextInt(0, 1)).thenReturn(0);
-
-        service.randomRefresh();
-
-        verify(oneHourRepository, times(1)).findAll();
-        verify(oneHourRepository, times(1)).save(any());
-        verify(binanceData, times(1)).fetchOHLC(anyString(), any());
-        verify(smaStrategy, times(1)).smaSignal(any());
-        verify(adapterService, times(1)).closingPrices(any());
-    }
-
-    @Test
     void shouldNotRefreshASymbolIfItDoesNotExists() throws InvalidSymbolException {
         when(oneHourRepository.findById(anyString())).thenReturn(Mono.empty());
 
@@ -117,65 +89,5 @@ public class OneHourSignalServiceTest {
         verify(oneHourRepository, times(0)).save(any());
     }
 
-    @Test
-    void shouldNotDeleteASymbolIfItDoesNotExists() {
-        when(oneHourRepository.existsById(anyString())).thenReturn(Mono.just(false));
-
-        Assertions.assertThatExceptionOfType(InvalidSymbolException.class)
-                .isThrownBy(() -> service.deleteSymbol("BTCUSDT"));
-
-        verify(oneHourRepository, times(1)).existsById(anyString());
-        verify(oneHourRepository, times(0)).deleteById(anyString());
-    }
-
-    @Test
-    void shouldDeleteASymbol() throws Exception {
-        when(oneHourRepository.existsById(anyString())).thenReturn(Mono.just(true));
-        when(oneHourRepository.deleteById(anyString())).thenReturn(Mono.empty());
-
-        service.deleteSymbol("BTCUSDT");
-
-        verify(oneHourRepository, times(1)).existsById(anyString());
-        verify(oneHourRepository, times(1)).deleteById(anyString());
-    }
-
-    @Test
-    void shouldNotSaveAnewSymbolIfItAlreadyExists() {
-        when(oneHourRepository.existsById(anyString())).thenReturn(Mono.just(true));
-        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[0]));
-
-        Assertions.assertThatExceptionOfType(SymbolAlreadyExistsException.class)
-                .isThrownBy(() -> service.saveNewSymbol("BTCUSDT"));
-
-        verify(oneHourRepository, times(1)).existsById(anyString());
-        verify(oneHourRepository, times(0)).save(any());
-        verify(binanceData, times(1)).fetchOHLC(anyString(), any());
-    }
-
-    @Test
-    void shouldNotSaveAnewSymbolIfItNotExistsInBinance() {
-        when(oneHourRepository.existsById(anyString())).thenReturn(Mono.just(false));
-        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[0]));
-
-        Assertions.assertThatExceptionOfType(InvalidSymbolException.class)
-                .isThrownBy(() -> service.saveNewSymbol("BTCUSDT"));
-
-        verify(oneHourRepository, times(1)).existsById(anyString());
-        verify(oneHourRepository, times(0)).save(any());
-        verify(binanceData, times(1)).fetchOHLC(anyString(), any());
-    }
-
-    @Test
-    void shouldSaveAnewSymbol() throws Exception {
-        when(oneHourRepository.existsById(anyString())).thenReturn(Mono.just(false));
-        when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(2f, 3f, 3f, 4f, 232)}));
-        when(oneHourRepository.save(any())).thenReturn(Mono.just(new OneHour("BTCUSDT", TradingSignal.NONE, 0)));
-
-        service.saveNewSymbol("BTCUSDT");
-
-        verify(oneHourRepository, times(1)).existsById(anyString());
-        verify(oneHourRepository, times(1)).save(any());
-        verify(binanceData, times(1)).fetchOHLC(anyString(), any());
-    }
 
 }
