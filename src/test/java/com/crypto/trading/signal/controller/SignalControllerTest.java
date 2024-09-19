@@ -1,8 +1,10 @@
 package com.crypto.trading.signal.controller;
 
+import com.crypto.trading.signal.entity.FourHour;
 import com.crypto.trading.signal.entity.OneDay;
 import com.crypto.trading.signal.entity.OneHour;
 import com.crypto.trading.signal.model.TradingSignal;
+import com.crypto.trading.signal.service.FourHourSignalService;
 import com.crypto.trading.signal.service.OneDaySignalService;
 import com.crypto.trading.signal.service.OneHourSignalService;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,9 @@ public class SignalControllerTest {
     @MockBean
     private OneHourSignalService oneHourSignalService;
 
+    @MockBean
+    private FourHourSignalService fourHourSignalService;
+
     @Test
     void shouldGetAllOneHour() throws Exception {
         given(oneHourSignalService.getAll()).willReturn(Flux.just(new OneHour("BTCUSDT", TradingSignal.BUY, 0)));
@@ -43,7 +48,7 @@ public class SignalControllerTest {
     }
 
     @Test
-    void shouldGetAll() throws Exception {
+    void shouldGetAllOneDay() throws Exception {
         given(oneDaySignalService.getAll()).willReturn(Flux.just(new OneDay("BTCUSDT", TradingSignal.BUY, 0)));
 
         client.get()
@@ -53,6 +58,19 @@ public class SignalControllerTest {
                 .is2xxSuccessful();
 
         verify(oneDaySignalService, times(1)).getAll();
+    }
+
+    @Test
+    void shouldGetAllFourHour() throws Exception {
+        given(fourHourSignalService.getAll()).willReturn(Flux.just(new FourHour("BTCUSDT", TradingSignal.BUY, 0)));
+
+        client.get()
+                .uri("/signals/fourhour/all")
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        verify(fourHourSignalService, times(1)).getAll();
     }
 
 }

@@ -43,9 +43,6 @@ public class OneDaySignalServiceTest {
     private BinanceData binanceData;
 
     @Mock
-    private Random random;
-
-    @Mock
     private SmaStrategy smaStrategy;
 
     @Test
@@ -78,9 +75,11 @@ public class OneDaySignalServiceTest {
         when(oneDayRepository.findById(anyString())).thenReturn(Mono.just(new OneDay("BTCUSDT", TradingSignal.SELL, 0)));
         when(oneDayRepository.save(any())).thenReturn(Mono.empty());
         when(binanceData.fetchOHLC(anyString(), any())).thenReturn(Mono.just(new Candle[]{new Candle(23.3f, 23.5f, 23.1f, 23.3f, 232)}));
+        when(smaStrategy.smaSignal(any())).thenReturn(TradingSignal.BUY);
 
         service.refresh("BTCUSDT");
 
+        verify(smaStrategy, times(1)).smaSignal(any());
         verify(oneDayRepository, times(1)).findById(anyString());
         verify(oneDayRepository, times(1)).save(any());
         verify(binanceData, times(1)).fetchOHLC(anyString(), any());
