@@ -1,6 +1,11 @@
 server:
-  port: 8288
-
+  port: 8298
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /tradingsignals/swagger.html
+  api-docs:
+    path: /tradingsignals/docs
 spring:
   application:
     name: crypto-trading-signal
