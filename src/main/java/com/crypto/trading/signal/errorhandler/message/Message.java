@@ -1,4 +1,4 @@
-package com.crypto.trading.signal.message;
+package com.crypto.trading.signal.errorhandler.message;
 
 public enum Message {
     SYMBOL_ALREADY_EXISTS("Symbol Already Exists"),

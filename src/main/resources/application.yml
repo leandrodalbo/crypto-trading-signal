@@ -18,27 +18,4 @@ spring:
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
 
-sma:
-  shortPeriod: 9
-  longPeriod: 21
-ema:
-  shortPeriod: 12
-  longPeriod: 26
-rsi:
-  period: 14
-bbands:
-  period: 20
-  stddev: 2
-macd:
-  fastPeriod: 12
-  slowPeriod: 26
-  signalPeriod: 9
-obv:
-  maperiod: 14
-stoch:
-  fastKPerdiod: 14
-  slowKPerdiod: 3
-  slowDPerdiod: 3
 
-crypto-data:
-  apiEndpoint: https://api.binance.com
