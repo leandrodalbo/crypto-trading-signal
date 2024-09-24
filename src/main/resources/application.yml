@@ -17,5 +17,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/tradingsignal
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: password
 
 
