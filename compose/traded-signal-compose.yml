@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  signalsDB:
+    image: "postgres:14.4"
+    container_name: "traded-signal-db"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  signalsRabbit:
+    image: "rabbitmq:3.10-management"
+    container_name: "traded-signal-rabbit"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
