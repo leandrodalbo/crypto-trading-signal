@@ -1,11 +1,15 @@
 # crypto-trading-signal
-crypto-trading-signal
+crypto-trading-signal-api
 
-- Fetching and analysing candles from Binance
-- Using different trading indicators to spot buy/sell opportunities
-- Using spring-boot and Java with ta-lib
+- REST API 
+- trading signals on different timeframes and technical indicators
 
-# running postgres container
+# running unit-tests
 ```bash
-docker run  --name tradingsignal -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=tradingsignal -p 5432:5432  postgres:14.4
+$./gradlew clean test
+```
+
+# start application
+```bash
+$./gradlew clean bootRun
 ```
