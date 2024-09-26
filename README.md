@@ -13,3 +13,7 @@ $./gradlew clean test
 ```bash
 $./gradlew clean bootRun
 ```
+# docker-compose
+```bash
+$docker-compose -f compose/traded-signal-compose.yml up     
+```
