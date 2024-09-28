@@ -13,8 +13,35 @@ public record OneDay(
         @Column("symbol")
         String symbol,
 
-        @Column("smacrossover")
-        TradingSignal smaCrossover,
+        @Column("signaltime")
+        long signalTime,
+
+        @Column("bollingerbands")
+        TradingSignal bollingerBands,
+
+        @Column("ema")
+        TradingSignal ema,
+
+        @Column("sma")
+        TradingSignal sma,
+
+        @Column("macd")
+        TradingSignal macd,
+
+        @Column("obv")
+        TradingSignal obv,
+
+        @Column("rsi")
+        TradingSignal rsi,
+
+        @Column("rsidivergence")
+        TradingSignal rsiDivergence,
+
+        @Column("stochastic")
+        TradingSignal stochastic,
+
+        @Column("engulfingcandle")
+        TradingSignal engulfingCandle,
 
         @Version
         @Column("version")

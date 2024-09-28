@@ -15,6 +15,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 
+import java.time.Instant;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -36,7 +38,7 @@ public class SignalControllerTest {
 
     @Test
     void shouldGetAllOneHour() throws Exception {
-        given(oneHourSignalService.getAll()).willReturn(Flux.just(new OneHour("BTCUSDT", TradingSignal.BUY, 0)));
+        given(oneHourSignalService.getAll()).willReturn(Flux.just(new OneHour("BTCUSDT", Instant.now().toEpochMilli(), TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         client.get()
                 .uri("/signals/onehour/all")
@@ -49,7 +51,7 @@ public class SignalControllerTest {
 
     @Test
     void shouldGetAllOneDay() throws Exception {
-        given(oneDaySignalService.getAll()).willReturn(Flux.just(new OneDay("BTCUSDT", TradingSignal.BUY, 0)));
+        given(oneDaySignalService.getAll()).willReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         client.get()
                 .uri("/signals/oneday/all")
@@ -62,7 +64,7 @@ public class SignalControllerTest {
 
     @Test
     void shouldGetAllFourHour() throws Exception {
-        given(fourHourSignalService.getAll()).willReturn(Flux.just(new FourHour("BTCUSDT", TradingSignal.BUY, 0)));
+        given(fourHourSignalService.getAll()).willReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         client.get()
                 .uri("/signals/fourhour/all")

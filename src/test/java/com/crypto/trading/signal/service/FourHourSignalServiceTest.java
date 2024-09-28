@@ -12,6 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+import java.time.Instant;
+
 import static org.mockito.Mockito.*;
 
 
@@ -27,7 +29,7 @@ public class FourHourSignalServiceTest {
 
     @Test
     void shouldFindAllSymbols() {
-        when(fourHourRepository.findAll()).thenReturn(Flux.just(new FourHour("BTCUSDT", TradingSignal.BUY, 0)));
+        when(fourHourRepository.findAll()).thenReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         Flux<FourHour> result = fourHourSignalService.getAll();
 
