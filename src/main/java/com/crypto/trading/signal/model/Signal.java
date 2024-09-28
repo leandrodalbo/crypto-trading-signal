@@ -37,4 +37,5 @@ public record Signal(String symbol,
                 stochastic,
                 engulfingCandle);
     }
+
 }
