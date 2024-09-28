@@ -47,7 +47,7 @@ public class ConsumeSignalService {
 
     private void saveOneDay(Signal signal) {
         oneDayRepository.findById(signal.symbol())
-                .defaultIfEmpty(OneDay.fromSignal(signal, 0))
+                .defaultIfEmpty(OneDay.fromSignal(signal, null))
                 .flatMap(oneDay ->
                         oneDayRepository.save(OneDay.fromSignal(signal, oneDay.version()))
                 ).subscribe();
@@ -55,7 +55,7 @@ public class ConsumeSignalService {
 
     private void saveOneHour(Signal signal) {
         oneHourRepository.findById(signal.symbol())
-                .defaultIfEmpty(OneHour.fromSignal(signal, 0))
+                .defaultIfEmpty(OneHour.fromSignal(signal, null))
                 .flatMap(oneDay ->
                         oneHourRepository.save(OneHour.fromSignal(signal, oneDay.version()))
                 ).subscribe();
@@ -63,7 +63,8 @@ public class ConsumeSignalService {
 
     private void saveFourHour(Signal signal) {
         fourHourRepository.findById(signal.symbol())
-                .defaultIfEmpty(FourHour.fromSignal(signal, 0))
+                .defaultIfEmpty(FourHour.fromSignal(signal, null
+                ))
                 .flatMap(oneDay ->
                         fourHourRepository.save(FourHour.fromSignal(signal, oneDay.version()))
                 ).subscribe();
