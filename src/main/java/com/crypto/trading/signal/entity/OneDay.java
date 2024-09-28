@@ -1,10 +1,13 @@
 package com.crypto.trading.signal.entity;
 
+import com.crypto.trading.signal.model.Signal;
 import com.crypto.trading.signal.model.TradingSignal;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
+import java.time.Instant;
 
 @Table("oneday")
 public record OneDay(
@@ -47,4 +50,18 @@ public record OneDay(
         @Column("version")
         Integer version
 ) {
+    public static OneDay fromSignal(Signal signal, Integer version) {
+        return new OneDay(signal.symbol(),
+                Instant.now().toEpochMilli(),
+                signal.bollingerBands(),
+                signal.ema(),
+                signal.sma(),
+                signal.macd(),
+                signal.obv(),
+                signal.rsi(),
+                signal.rsiDivergence(),
+                signal.stochastic(),
+                signal.engulfingCandle(),
+                version);
+    }
 }
