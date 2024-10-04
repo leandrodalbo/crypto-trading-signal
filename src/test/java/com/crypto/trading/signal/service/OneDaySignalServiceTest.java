@@ -1,6 +1,7 @@
 package com.crypto.trading.signal.service;
 
 import com.crypto.trading.signal.entity.OneDay;
+import com.crypto.trading.signal.model.SignalStrength;
 import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.repository.OneDayRepository;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ public class OneDaySignalServiceTest {
 
     @Test
     void willFindAllRecords() {
-        when(oneDayRepository.findAll()).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        when(oneDayRepository.findAll()).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         Flux<OneDay> result = service.getAll();
 

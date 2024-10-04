@@ -1,5 +1,6 @@
 package com.crypto.trading.signal.repository;
 
+import com.crypto.trading.signal.model.SignalStrength;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
@@ -10,8 +11,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import reactor.test.StepVerifier;
-
-import java.util.Objects;
 
 @DataR2dbcTest
 @Testcontainers
@@ -57,6 +56,13 @@ public class OneDayRepositoryTest {
     void willFindAll() {
         StepVerifier.create(repository.findAll())
                 .thenConsumeWhile(it -> it.symbol() != null)
+                .verifyComplete();
+    }
+
+    @Test
+    void willFindByStrength() {
+        StepVerifier.create(repository.findByStrength(SignalStrength.STRONG))
+                .thenConsumeWhile(it -> SignalStrength.STRONG.equals(it.strength()))
                 .verifyComplete();
     }
 }

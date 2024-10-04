@@ -1,5 +1,6 @@
 package com.crypto.trading.signal.repository;
 
+import com.crypto.trading.signal.model.SignalStrength;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
@@ -48,6 +49,13 @@ public class FourHourRepositoryTest {
     void willFindAll() {
         StepVerifier.create(repository.findAll())
                 .thenConsumeWhile(it -> it.symbol() != null)
+                .verifyComplete();
+    }
+
+    @Test
+    void willFindByStrength() {
+        StepVerifier.create(repository.findByStrength(SignalStrength.LOW))
+                .thenConsumeWhile(it -> SignalStrength.LOW.equals(it.strength()))
                 .verifyComplete();
     }
 }

@@ -1,6 +1,7 @@
 package com.crypto.trading.signal.service;
 
 import com.crypto.trading.signal.entity.FourHour;
+import com.crypto.trading.signal.model.SignalStrength;
 import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.repository.FourHourRepository;
 
@@ -29,7 +30,7 @@ public class FourHourSignalServiceTest {
 
     @Test
     void shouldFindAllSymbols() {
-        when(fourHourRepository.findAll()).thenReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        when(fourHourRepository.findAll()).thenReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         Flux<FourHour> result = fourHourSignalService.getAll();
 

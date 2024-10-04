@@ -3,6 +3,7 @@ package com.crypto.trading.signal.model;
 
 public record Signal(String symbol,
                      Timeframe timeframe,
+                     SignalStrength strength,
                      TradingSignal bollingerBands,
                      TradingSignal ema,
                      TradingSignal sma,
@@ -16,6 +17,7 @@ public record Signal(String symbol,
 
     public static Signal of(String symbol,
                             Timeframe timeframe,
+                            SignalStrength strength,
                             TradingSignal bollingerBands,
                             TradingSignal ema,
                             TradingSignal sma,
@@ -27,6 +29,7 @@ public record Signal(String symbol,
                             TradingSignal engulfingCandle) {
         return new Signal(symbol,
                 timeframe,
+                strength,
                 bollingerBands,
                 ema,
                 sma,
