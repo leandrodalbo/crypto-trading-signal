@@ -3,6 +3,7 @@ package com.crypto.trading.signal.controller;
 import com.crypto.trading.signal.entity.FourHour;
 import com.crypto.trading.signal.entity.OneDay;
 import com.crypto.trading.signal.entity.OneHour;
+import com.crypto.trading.signal.model.SignalStrength;
 import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.service.FourHourSignalService;
 import com.crypto.trading.signal.service.OneDaySignalService;
@@ -37,8 +38,8 @@ public class SignalControllerTest {
     private FourHourSignalService fourHourSignalService;
 
     @Test
-    void shouldGetAllOneHour() throws Exception {
-        given(oneHourSignalService.getAll()).willReturn(Flux.just(new OneHour("BTCUSDT", Instant.now().toEpochMilli(), TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+    void shouldGetAllOneHour() {
+        given(oneHourSignalService.getAll()).willReturn(Flux.just(new OneHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         client.get()
                 .uri("/signals/onehour/all")
@@ -50,8 +51,8 @@ public class SignalControllerTest {
     }
 
     @Test
-    void shouldGetAllOneDay() throws Exception {
-        given(oneDaySignalService.getAll()).willReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+    void shouldGetAllOneDay() {
+        given(oneDaySignalService.getAll()).willReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         client.get()
                 .uri("/signals/oneday/all")
@@ -63,8 +64,8 @@ public class SignalControllerTest {
     }
 
     @Test
-    void shouldGetAllFourHour() throws Exception {
-        given(fourHourSignalService.getAll()).willReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+    void shouldGetAllFourHour() {
+        given(fourHourSignalService.getAll()).willReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         client.get()
                 .uri("/signals/fourhour/all")

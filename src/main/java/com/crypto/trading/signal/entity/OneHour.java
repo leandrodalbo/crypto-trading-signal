@@ -1,6 +1,7 @@
 package com.crypto.trading.signal.entity;
 
 import com.crypto.trading.signal.model.Signal;
+import com.crypto.trading.signal.model.SignalStrength;
 import com.crypto.trading.signal.model.TradingSignal;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
@@ -18,6 +19,9 @@ public record OneHour(
 
         @Column("signaltime")
         long signalTime,
+
+        @Column("strength")
+        SignalStrength strength,
 
         @Column("bollingerbands")
         TradingSignal bollingerBands,
@@ -53,6 +57,7 @@ public record OneHour(
     public static OneHour fromSignal(Signal signal, Integer version) {
         return new OneHour(signal.symbol(),
                 Instant.now().toEpochMilli(),
+                signal.strength(),
                 signal.bollingerBands(),
                 signal.ema(),
                 signal.sma(),

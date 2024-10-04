@@ -1,6 +1,7 @@
 package com.crypto.trading.signal.service;
 
 import com.crypto.trading.signal.entity.OneHour;
+import com.crypto.trading.signal.model.SignalStrength;
 import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.repository.OneHourRepository;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ public class OneHourSignalServiceTest {
 
     @Test
     void shouldFindAllSymbols() {
-        when(oneHourRepository.findAll()).thenReturn(Flux.just(new OneHour("BTCUSDT", Instant.now().toEpochMilli(), TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        when(oneHourRepository.findAll()).thenReturn(Flux.just(new OneHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         Flux<OneHour> result = service.getAll();
 
