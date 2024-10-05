@@ -13,7 +13,7 @@ public class OneDayTest {
     @Test
     public void willCreateAnInstanceFromASignal() {
         int version = 1;
-        Signal signal = new Signal("BTCUSDT", Timeframe.D1, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
+        Signal signal = new Signal("BTCUSDT", Timeframe.D1, SignalStrength.STRONG, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
 
         OneDay oneDay = OneDay.fromSignal(signal, version);
 

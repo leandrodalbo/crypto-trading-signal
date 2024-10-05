@@ -9,5 +9,6 @@ import reactor.core.publisher.Flux;
 
 @Repository
 public interface OneDayRepository extends ReactiveCrudRepository<OneDay, String> {
-    Flux<FourHour> findByStrength(SignalStrength strength);
+    Flux<OneDay> findByBuyStrength(SignalStrength buyStrength);
+    Flux<OneDay> findBySellStrength(SignalStrength sellStrength);
 }

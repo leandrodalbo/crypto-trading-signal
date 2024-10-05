@@ -13,7 +13,7 @@ public class OneHourTest {
     @Test
     public void willCreateAnInstanceFromASignal() {
         int version = 1;
-        Signal signal = new Signal("BTCUSDT", Timeframe.D1, SignalStrength.MEDIUM,  TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
+        Signal signal = new Signal("BTCUSDT", Timeframe.D1, SignalStrength.STRONG, SignalStrength.MEDIUM, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
 
         OneHour oneHour = OneHour.fromSignal(signal, version);
 

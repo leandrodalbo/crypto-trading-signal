@@ -38,8 +38,8 @@ public class ConsumeSignalServiceTest {
 
     @Test
     public void willSaveOneDaySignal() {
-        Signal signal = new Signal("BTCUSDT", Timeframe.D1, SignalStrength.MEDIUM, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
-        when(oneDayRepository.findById(anyString())).thenReturn(Mono.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.MEDIUM, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        Signal signal = new Signal("BTCUSDT", Timeframe.D1, SignalStrength.STRONG, SignalStrength.MEDIUM, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
+        when(oneDayRepository.findById(anyString())).thenReturn(Mono.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.MEDIUM, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
         when(oneDayRepository.save(any())).thenReturn(Mono.empty());
 
         service.consumeSignal(signal);
@@ -50,8 +50,8 @@ public class ConsumeSignalServiceTest {
 
     @Test
     public void willSaveOneHourSignal() {
-        Signal signal = new Signal("BTCUSDT", Timeframe.H1, SignalStrength.MEDIUM, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
-        when(oneHourRepository.findById(anyString())).thenReturn(Mono.just(new OneHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.MEDIUM, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        Signal signal = new Signal("BTCUSDT", Timeframe.H1, SignalStrength.LOW, SignalStrength.MEDIUM, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
+        when(oneHourRepository.findById(anyString())).thenReturn(Mono.just(new OneHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.MEDIUM, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
         when(oneHourRepository.save(any())).thenReturn(Mono.empty());
 
         service.consumeSignal(signal);
@@ -62,8 +62,8 @@ public class ConsumeSignalServiceTest {
 
     @Test
     public void willSaveFourHourSignal() {
-        Signal signal = new Signal("BTCUSDT", Timeframe.H4, SignalStrength.MEDIUM, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
-        when(fourHourRepository.findById(anyString())).thenReturn(Mono.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.MEDIUM, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        Signal signal = new Signal("BTCUSDT", Timeframe.H4, SignalStrength.MEDIUM, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
+        when(fourHourRepository.findById(anyString())).thenReturn(Mono.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.MEDIUM, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
         when(fourHourRepository.save(any())).thenReturn(Mono.empty());
 
         service.consumeSignal(signal);

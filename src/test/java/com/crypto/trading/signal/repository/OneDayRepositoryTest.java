@@ -60,9 +60,16 @@ public class OneDayRepositoryTest {
     }
 
     @Test
-    void willFindByStrength() {
-        StepVerifier.create(repository.findByStrength(SignalStrength.STRONG))
-                .thenConsumeWhile(it -> SignalStrength.STRONG.equals(it.strength()))
+    void willFindByBuyStrength() {
+        StepVerifier.create(repository.findByBuyStrength(SignalStrength.STRONG))
+                .thenConsumeWhile(it -> SignalStrength.STRONG.equals(it.buyStrength()))
+                .verifyComplete();
+    }
+
+    @Test
+    void willFindBySellStrength() {
+        StepVerifier.create(repository.findBySellStrength(SignalStrength.LOW))
+                .thenConsumeWhile(it -> SignalStrength.LOW.equals(it.sellStrength()))
                 .verifyComplete();
     }
 }

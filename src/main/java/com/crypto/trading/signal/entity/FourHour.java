@@ -20,8 +20,11 @@ public record FourHour(
         @Column("signaltime")
         long signalTime,
 
-        @Column("strength")
-        SignalStrength strength,
+        @Column("buystrength")
+        SignalStrength buyStrength,
+
+        @Column("sellstrength")
+        SignalStrength sellStrength,
 
         @Column("bollingerbands")
         TradingSignal bollingerBands,
@@ -57,7 +60,8 @@ public record FourHour(
     public static FourHour fromSignal(Signal signal, Integer version) {
         return new FourHour(signal.symbol(),
                 Instant.now().toEpochMilli(),
-                signal.strength(),
+                signal.buyStrength(),
+                signal.sellStrength(),
                 signal.bollingerBands(),
                 signal.ema(),
                 signal.sma(),

@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS oneday;
 CREATE TABLE oneday (
     symbol              varchar(30) PRIMARY KEY NOT NULL,
     signaltime          BIGINT NOT NULL,
-    strength            varchar(10) NOT NULL,
+    buystrength         varchar(10) NOT NULL,
+    sellstrength        varchar(10) NOT NULL,
     bollingerbands      varchar(10) NOT NULL,
     ema                 varchar(10) NOT NULL,
     sma                 varchar(10) NOT NULL,
@@ -19,7 +20,8 @@ DROP TABLE IF EXISTS fourhour;
 CREATE TABLE fourhour (
     symbol              varchar(30) PRIMARY KEY NOT NULL,
     signaltime          BIGINT NOT NULL,
-    strength            varchar(10) NOT NULL,
+    buystrength         varchar(10) NOT NULL,
+    sellstrength        varchar(10) NOT NULL,
     bollingerbands      varchar(10) NOT NULL,
     ema                 varchar(10) NOT NULL,
     sma                 varchar(10) NOT NULL,
@@ -36,7 +38,8 @@ DROP TABLE IF EXISTS onehour;
 CREATE TABLE onehour (
     symbol              varchar(30) PRIMARY KEY NOT NULL,
     signaltime          BIGINT NOT NULL,
-    strength            varchar(10) NOT NULL,
+    buystrength         varchar(10) NOT NULL,
+    sellstrength        varchar(10) NOT NULL,
     bollingerbands      varchar(10) NOT NULL,
     ema                 varchar(10) NOT NULL,
     sma                 varchar(10) NOT NULL,
