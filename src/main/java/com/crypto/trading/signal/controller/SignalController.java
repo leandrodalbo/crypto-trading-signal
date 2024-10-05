@@ -3,12 +3,12 @@ package com.crypto.trading.signal.controller;
 import com.crypto.trading.signal.entity.FourHour;
 import com.crypto.trading.signal.entity.OneDay;
 import com.crypto.trading.signal.entity.OneHour;
+import com.crypto.trading.signal.model.SignalStrength;
+import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.service.FourHourSignalService;
 import com.crypto.trading.signal.service.OneDaySignalService;
 import com.crypto.trading.signal.service.OneHourSignalService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 @RestController
@@ -30,13 +30,31 @@ public class SignalController {
         return daySignalService.getAll();
     }
 
+    @GetMapping("/oneday")
+    public Flux<OneDay> findOneDayBySignalStrength(@RequestParam TradingSignal signal,
+                                                   @RequestParam SignalStrength strength) {
+        return daySignalService.getByStrength(signal, strength);
+    }
+
     @GetMapping("/onehour/all")
     public Flux<OneHour> findAllOneHour() {
         return hourSignalService.getAll();
     }
 
+    @GetMapping("/onehour")
+    public Flux<OneHour> findOneHourBySignalStrength(@RequestParam TradingSignal signal,
+                                                     @RequestParam SignalStrength strength) {
+        return hourSignalService.getByStrength(signal, strength);
+    }
+
     @GetMapping("/fourhour/all")
     public Flux<FourHour> findAllFourHour() {
         return fourHourSignalService.getAll();
+    }
+
+    @GetMapping("/fourhour")
+    public Flux<FourHour> findFourHourBySignalStrength(@RequestParam TradingSignal signal,
+                                                       @RequestParam SignalStrength strength) {
+        return fourHourSignalService.getByStrength(signal, strength);
     }
 }

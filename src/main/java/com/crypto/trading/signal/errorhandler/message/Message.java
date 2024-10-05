@@ -2,9 +2,10 @@ package com.crypto.trading.signal.errorhandler.message;
 
 public enum Message {
     SYMBOL_ALREADY_EXISTS("Symbol Already Exists"),
-    INVALID_SYMBOL("Invalid Symbol");
+    INVALID_SYMBOL("Invalid Symbol"),
+    INVALID_PARAMETER("Invalid Parameter %s, value %s");
 
-    private String message;
+    private final String message;
 
     Message(String message) {
         this.message = message;
