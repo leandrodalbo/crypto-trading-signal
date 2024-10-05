@@ -53,9 +53,16 @@ public class OneHourRepositoryTest {
     }
 
     @Test
-    void willFindByStrength() {
-        StepVerifier.create(repository.findByStrength(SignalStrength.MEDIUM))
-                .thenConsumeWhile(it -> SignalStrength.MEDIUM.equals(it.strength()))
+    void willFindByBuyStrength() {
+        StepVerifier.create(repository.findByBuyStrength(SignalStrength.MEDIUM))
+                .thenConsumeWhile(it -> SignalStrength.MEDIUM.equals(it.buyStrength()))
+                .verifyComplete();
+    }
+
+    @Test
+    void willFindBySellStrength() {
+        StepVerifier.create(repository.findBySellStrength(SignalStrength.STRONG))
+                .thenConsumeWhile(it -> SignalStrength.STRONG.equals(it.sellStrength()))
                 .verifyComplete();
     }
 }

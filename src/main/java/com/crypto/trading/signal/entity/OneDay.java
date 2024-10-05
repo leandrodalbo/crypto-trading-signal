@@ -20,8 +20,11 @@ public record OneDay(
         @Column("signaltime")
         long signalTime,
 
-        @Column("strength")
-        SignalStrength strength,
+        @Column("buystrength")
+        SignalStrength buyStrength,
+
+        @Column("sellstrength")
+        SignalStrength sellStrength,
 
         @Column("bollingerbands")
         TradingSignal bollingerBands,
@@ -57,7 +60,8 @@ public record OneDay(
     public static OneDay fromSignal(Signal signal, Integer version) {
         return new OneDay(signal.symbol(),
                 Instant.now().toEpochMilli(),
-                signal.strength(),
+                signal.buyStrength(),
+                signal.sellStrength(),
                 signal.bollingerBands(),
                 signal.ema(),
                 signal.sma(),
