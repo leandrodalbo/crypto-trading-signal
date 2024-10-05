@@ -18,6 +18,7 @@ import reactor.core.publisher.Flux;
 
 import java.time.Instant;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -74,6 +75,91 @@ public class SignalControllerTest {
                 .is2xxSuccessful();
 
         verify(fourHourSignalService, times(1)).getAll();
+    }
+
+    @Test
+    void shouldFailWithInvalidSignalAndStrengthValues() {
+
+        client.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/signals/fourhour")
+                        .queryParam("signal", 1)
+                        .queryParam("strength", SignalStrength.LOW)
+                        .build())
+                .exchange()
+                .expectStatus()
+                .is4xxClientError();
+
+        client.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/signals/onehour")
+                        .queryParam("signal", TradingSignal.BUY)
+                        .queryParam("strength", "rubbish")
+                        .build())
+                .exchange()
+                .expectStatus()
+                .is4xxClientError();
+
+        client.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/signals/oneday")
+                        .queryParam("signal", TradingSignal.BUY)
+                        .queryParam("strength", "")
+                        .build())
+                .exchange()
+                .expectStatus()
+                .is4xxClientError();
+    }
+
+    @Test
+    void shouldFindOneHourBySignalAndStrengthValues() {
+        given(oneHourSignalService.getByStrength(any(), any())).willReturn(Flux.just(new OneHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+
+        client.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/signals/onehour")
+                        .queryParam("signal", TradingSignal.BUY)
+                        .queryParam("strength", SignalStrength.LOW)
+                        .build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        verify(oneHourSignalService, times(1)).getByStrength(any(), any());
+    }
+
+    @Test
+    void shouldFindFourHourBySignalAndStrengthValues() {
+        given(fourHourSignalService.getByStrength(any(), any())).willReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+
+        client.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/signals/fourhour")
+                        .queryParam("signal", TradingSignal.BUY)
+                        .queryParam("strength", SignalStrength.LOW)
+                        .build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        verify(fourHourSignalService, times(1)).getByStrength(any(), any());
+    }
+
+    @Test
+    void shouldFindOneDayBySignalAndStrengthValues() {
+        given(oneDaySignalService.getByStrength(any(), any())).willReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+
+        client.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/signals/oneday")
+                        .queryParam("signal", TradingSignal.BUY)
+                        .queryParam("strength", SignalStrength.LOW)
+                        .build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        verify(oneDaySignalService, times(1)).getByStrength(any(), any());
     }
 
 }

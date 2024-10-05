@@ -1,5 +1,6 @@
 package com.crypto.trading.signal.service;
 
+import com.crypto.trading.signal.entity.FourHour;
 import com.crypto.trading.signal.entity.OneDay;
 import com.crypto.trading.signal.model.SignalStrength;
 import com.crypto.trading.signal.model.TradingSignal;
@@ -14,6 +15,7 @@ import reactor.test.StepVerifier;
 
 import java.time.Instant;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
@@ -38,5 +40,29 @@ public class OneDaySignalServiceTest {
                 .thenConsumeWhile(it -> !it.symbol().isEmpty());
 
         verify(oneDayRepository, times(1)).findAll();
+    }
+
+    @Test
+    void shouldFindSellStrongSignals() {
+        when(oneDayRepository.findBySellStrength(any())).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+
+        Flux<OneDay> result = service.getByStrength(TradingSignal.SELL, SignalStrength.STRONG);
+
+        StepVerifier.create(result)
+                .thenConsumeWhile(it -> SignalStrength.STRONG.equals(it.sellStrength()));
+
+        verify(oneDayRepository, times(1)).findBySellStrength(any());
+    }
+
+    @Test
+    void shouldFindBuyLowSignals() {
+        when(oneDayRepository.findByBuyStrength(any())).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+
+        Flux<OneDay> result = service.getByStrength(TradingSignal.BUY, SignalStrength.LOW);
+
+        StepVerifier.create(result)
+                .thenConsumeWhile(it -> SignalStrength.LOW.equals(it.buyStrength()));
+
+        verify(oneDayRepository, times(1)).findByBuyStrength(any());
     }
 }

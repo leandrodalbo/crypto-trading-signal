@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class CustomErrors {
 
-    @ExceptionHandler(InvalidSymbolException.class)
-    public ResponseEntity<String> invalidSymbol(Exception e) {
+    @ExceptionHandler({InvalidSymbolException.class})
+    public ResponseEntity<String> notAcceptable(Exception e) {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(
                 e.getMessage());
     }
@@ -24,8 +24,8 @@ public class CustomErrors {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> allExceptions() {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                HttpStatus.BAD_REQUEST.getReasonPhrase());
     }
 
 }
