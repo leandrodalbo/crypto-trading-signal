@@ -8,7 +8,11 @@ import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.service.FourHourSignalService;
 import com.crypto.trading.signal.service.OneDaySignalService;
 import com.crypto.trading.signal.service.OneHourSignalService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import reactor.core.publisher.Flux;
 
 @RestController
