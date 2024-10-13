@@ -8,6 +8,9 @@ import com.crypto.trading.signal.repository.FourHourRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
+import java.time.Instant;
+
 @Service
 public class FourHourSignalService {
 
@@ -24,8 +27,10 @@ public class FourHourSignalService {
     public Flux<FourHour> getByStrength(TradingSignal signal, SignalStrength strength) {
 
         if (TradingSignal.SELL.equals(signal))
-            return this.fourHourRepository.findBySellStrength(strength);
+            return this.fourHourRepository.findBySellStrength(strength)
+                    .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(4))));
 
-        return this.fourHourRepository.findByBuyStrength(strength);
+        return this.fourHourRepository.findByBuyStrength(strength)
+                .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(4))));
     }
 }
