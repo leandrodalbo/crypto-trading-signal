@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+import java.time.Duration;
 import java.time.Instant;
 
 import static org.mockito.Mockito.*;
@@ -35,32 +36,61 @@ public class FourHourSignalServiceTest {
         Flux<FourHour> result = fourHourSignalService.getAll();
 
         StepVerifier.create(result)
-                .thenConsumeWhile(it -> !it.symbol().isEmpty());
+                .thenConsumeWhile(it -> !it.symbol().isEmpty())
+                .verifyComplete();
 
         verify(fourHourRepository, times(1)).findAll();
     }
 
     @Test
     void shouldFindSellStrongSignals() {
-        when(fourHourRepository.findBySellStrength(any())).thenReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        when(fourHourRepository.findBySellStrength(any())).thenReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().minus(Duration.ofHours(1)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         Flux<FourHour> result = fourHourSignalService.getByStrength(TradingSignal.SELL, SignalStrength.STRONG);
 
         StepVerifier.create(result)
-                .thenConsumeWhile(it -> SignalStrength.STRONG.equals(it.sellStrength()));
+                .thenConsumeWhile(it -> SignalStrength.STRONG.equals(it.sellStrength()))
+                .verifyComplete();
 
         verify(fourHourRepository, times(1)).findBySellStrength(any());
     }
 
     @Test
-    void shouldFindBuyLowSignals() {
-        when(fourHourRepository.findByBuyStrength(any())).thenReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+    void shouldFindBuyMediumSignals() {
+        when(fourHourRepository.findByBuyStrength(any())).thenReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().minus(Duration.ofHours(2)).toEpochMilli(), SignalStrength.MEDIUM, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+
+        Flux<FourHour> result = fourHourSignalService.getByStrength(TradingSignal.BUY, SignalStrength.MEDIUM);
+
+        StepVerifier.create(result)
+                .thenConsumeWhile(it -> SignalStrength.MEDIUM.equals(it.buyStrength()))
+                .verifyComplete();
+
+        verify(fourHourRepository, times(1)).findByBuyStrength(any());
+    }
+
+    @Test
+    void shouldFilterOldBuySignals() {
+        when(fourHourRepository.findByBuyStrength(any())).thenReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().minus(Duration.ofHours(25)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         Flux<FourHour> result = fourHourSignalService.getByStrength(TradingSignal.BUY, SignalStrength.LOW);
 
         StepVerifier.create(result)
-                .thenConsumeWhile(it -> SignalStrength.LOW.equals(it.buyStrength()));
+                .expectSubscription()
+                .verifyComplete();
 
         verify(fourHourRepository, times(1)).findByBuyStrength(any());
+    }
+
+    @Test
+    void shouldFilterOldSellSignals() {
+        when(fourHourRepository.findBySellStrength(any())).thenReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().minus(Duration.ofHours(25)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+
+        Flux<FourHour> result = fourHourSignalService.getByStrength(TradingSignal.SELL, SignalStrength.STRONG);
+
+        StepVerifier.create(result)
+                .expectSubscription()
+                .verifyComplete();
+
+        verify(fourHourRepository, times(1)).findBySellStrength(any());
     }
 }
