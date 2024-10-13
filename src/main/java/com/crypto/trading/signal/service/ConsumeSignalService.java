@@ -46,7 +46,7 @@ public class ConsumeSignalService {
             logBuyOpportunity(signal);
         }
         if (SignalStrength.STRONG.equals(signal.sellStrength()) || SignalStrength.MEDIUM.equals(signal.sellStrength())) {
-            logBuyOpportunity(signal);
+            logSellOpportunity(signal);
         }
     }
 
@@ -76,31 +76,31 @@ public class ConsumeSignalService {
     }
 
     private void logBuyOpportunity(Signal s) {
-        logger.info("Possible buying opportunity...");
+        logger.info("Possible BUY opportunity...");
         printSignal(s);
     }
 
     private void logSellOpportunity(Signal s) {
-        logger.info("Possible selling opportunity...");
+        logger.info("Possible SELL opportunity...");
         printSignal(s);
     }
 
     private void printSignal(Signal s) {
-        logger.info(String.format("Symbol: %s", s.symbol()));
-        logger.info(String.format("Timeframe: %s", s.timeframe()));
-        logger.info("Indicators: \n" +
-                "\t [Bollinger Bands = % \n" + s.bollingerBands() + "]" +
-                "\t [EMA = % \n" + s.ema() + "]" +
-                "\t [SMA = % \n" + s.sma() + "]" +
-                "\t [MACD = % \n" + s.macd() + "]" +
-                "\t [LINDA MACD = % \n" + s.lindaMACD() + "]" +
-                "\t [RSI = % \n" + s.rsi() + "]" +
-                "\t [RSI DIVERGENCE = % \n" + s.rsiDivergence() + "]" +
-                "\t [STOCHASTIC = % \n" + s.stochastic() + "]" +
-                "\t [OBV = % \n" + s.obv() + "]" +
-                "\t [ENGULFING CANDLES = % \n" + s.engulfingCandle() + "]" +
-                "\t [HAMMER/SHOOTING START CANDLES = % \n" + s.hammerAndShootingStars() + "]" +
-                "\t [TURTLE STRATEGY = % \n" + s.turtleSignal() + "]"
-        );
+        StringBuffer buffer = new StringBuffer("Indicators:\n");
+
+        buffer.append("\t[Bollinger Bands =" + s.bollingerBands() + "]\n");
+        buffer.append("\t[EMA =" + s.ema() + "]\n");
+        buffer.append("\t[SMA =" + s.sma() + "]\n");
+        buffer.append("\t[MACD =" + s.macd() + "]\n");
+        buffer.append("\t[LINDA MACD =" + s.lindaMACD() + "]\n");
+        buffer.append("\t[RSI =" + s.rsi() + "]\n");
+        buffer.append("\t[RSI DIVERGENCE =" + s.rsiDivergence() + "]\n");
+        buffer.append("\t[STOCHASTIC =" + s.stochastic() + "]\n");
+        buffer.append("\t[OBV =" + s.obv() + "]\n");
+        buffer.append("\t[ENGULFING CANDLES =" + s.engulfingCandle() + "]\n");
+        buffer.append("\t[HAMMER/SHOOTING START CANDLES =" + s.hammerAndShootingStars() + "]\n");
+        buffer.append("\t[TURTLE STRATEGY =" + s.turtleSignal() + "]\n");
+
+        logger.info(String.format("Symbol: %s, Timeframe: %s, %s", s.symbol(), s.timeframe(), buffer.toString()));
     }
 }
