@@ -29,9 +29,9 @@ public class OneDaySignalService {
 
         if (TradingSignal.SELL.equals(signal))
             return this.oneDayRepository.findBySellStrength(strength)
-                    .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(24))));
+                    .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(48))));
 
         return this.oneDayRepository.findByBuyStrength(strength)
-                .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(24))));
+                .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(48))));
     }
 }

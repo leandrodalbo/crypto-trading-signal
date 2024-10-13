@@ -71,7 +71,7 @@ public class OneDaySignalServiceTest {
 
     @Test
     void shouldFilterOldBuySignals() {
-        when(oneDayRepository.findByBuyStrength(any())).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().minus(Duration.ofHours(35)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        when(oneDayRepository.findByBuyStrength(any())).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().minus(Duration.ofHours(65)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         Flux<OneDay> result = service.getByStrength(TradingSignal.BUY, SignalStrength.LOW);
 
@@ -84,7 +84,7 @@ public class OneDaySignalServiceTest {
 
     @Test
     void shouldFilterOldSellSignals() {
-        when(oneDayRepository.findBySellStrength(any())).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().minus(Duration.ofHours(35)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        when(oneDayRepository.findBySellStrength(any())).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().minus(Duration.ofHours(55)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
         Flux<OneDay> result = service.getByStrength(TradingSignal.SELL, SignalStrength.STRONG);
 

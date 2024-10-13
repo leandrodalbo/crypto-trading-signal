@@ -28,9 +28,9 @@ public class OneHourSignalService {
 
         if (TradingSignal.SELL.equals(signal))
             return this.oneHourRepository.findBySellStrength(strength)
-                    .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(1))));
+                    .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(12))));
 
         return this.oneHourRepository.findByBuyStrength(strength)
-                .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(1))));
+                .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(12))));
     }
 }
