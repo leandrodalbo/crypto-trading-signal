@@ -5,6 +5,7 @@ import com.crypto.trading.signal.entity.FourHour;
 import com.crypto.trading.signal.entity.OneDay;
 import com.crypto.trading.signal.entity.OneHour;
 import com.crypto.trading.signal.model.Signal;
+import com.crypto.trading.signal.model.SignalStrength;
 import com.crypto.trading.signal.model.Timeframe;
 import com.crypto.trading.signal.repository.FourHourRepository;
 import com.crypto.trading.signal.repository.OneDayRepository;
@@ -32,9 +33,6 @@ public class ConsumeSignalService {
 
     @RabbitListener(queues = RabbitConf.QUEUE_NAME)
     public void consumeSignal(final Signal signal) {
-        logger.info(signal.toString());
-
-
         if (Timeframe.D1.equals(signal.timeframe()))
             saveOneDay(signal);
 
@@ -43,6 +41,13 @@ public class ConsumeSignalService {
 
         if (Timeframe.H4.equals(signal.timeframe()))
             saveFourHour(signal);
+
+        if (SignalStrength.STRONG.equals(signal.buyStrength()) || SignalStrength.MEDIUM.equals(signal.buyStrength())) {
+            logBuyOpportunity(signal);
+        }
+        if (SignalStrength.STRONG.equals(signal.sellStrength()) || SignalStrength.MEDIUM.equals(signal.sellStrength())) {
+            logBuyOpportunity(signal);
+        }
     }
 
     private void saveOneDay(Signal signal) {
@@ -68,5 +73,34 @@ public class ConsumeSignalService {
                 .flatMap(oneDay ->
                         fourHourRepository.save(FourHour.fromSignal(signal, oneDay.version()))
                 ).subscribe();
+    }
+
+    private void logBuyOpportunity(Signal s) {
+        logger.info("Possible buying opportunity...");
+        printSignal(s);
+    }
+
+    private void logSellOpportunity(Signal s) {
+        logger.info("Possible selling opportunity...");
+        printSignal(s);
+    }
+
+    private void printSignal(Signal s) {
+        logger.info(String.format("Symbol: %s", s.symbol()));
+        logger.info(String.format("Timeframe: %s", s.timeframe()));
+        logger.info("Indicators: \n" +
+                "\t [Bollinger Bands = % \n" + s.bollingerBands() + "]" +
+                "\t [EMA = % \n" + s.ema() + "]" +
+                "\t [SMA = % \n" + s.sma() + "]" +
+                "\t [MACD = % \n" + s.macd() + "]" +
+                "\t [LINDA MACD = % \n" + s.lindaMACD() + "]" +
+                "\t [RSI = % \n" + s.rsi() + "]" +
+                "\t [RSI DIVERGENCE = % \n" + s.rsiDivergence() + "]" +
+                "\t [STOCHASTIC = % \n" + s.stochastic() + "]" +
+                "\t [OBV = % \n" + s.obv() + "]" +
+                "\t [ENGULFING CANDLES = % \n" + s.engulfingCandle() + "]" +
+                "\t [HAMMER/SHOOTING START CANDLES = % \n" + s.hammerAndShootingStars() + "]" +
+                "\t [TURTLE STRATEGY = % \n" + s.turtleSignal() + "]"
+        );
     }
 }
