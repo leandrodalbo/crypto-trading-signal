@@ -1,6 +1,5 @@
 package com.crypto.trading.signal.model;
 
-
 public record Signal(String symbol,
                      Timeframe timeframe,
                      SignalStrength buyStrength,
@@ -13,7 +12,10 @@ public record Signal(String symbol,
                      TradingSignal rsi,
                      TradingSignal rsiDivergence,
                      TradingSignal stochastic,
-                     TradingSignal engulfingCandle
+                     TradingSignal engulfingCandle,
+                     TradingSignal lindaMACD,
+                     TradingSignal turtleSignal,
+                     TradingSignal hammerAndShootingStars
 ) {
 
     public static Signal of(String symbol,
@@ -28,7 +30,10 @@ public record Signal(String symbol,
                             TradingSignal rsi,
                             TradingSignal rsiDivergence,
                             TradingSignal stochastic,
-                            TradingSignal engulfingCandle) {
+                            TradingSignal engulfingCandle,
+                            TradingSignal lindaMACD,
+                            TradingSignal turtleSignal,
+                            TradingSignal hammerAndShootingStars) {
         return new Signal(symbol,
                 timeframe,
                 buyStrength,
@@ -41,6 +46,9 @@ public record Signal(String symbol,
                 rsi,
                 rsiDivergence,
                 stochastic,
-                engulfingCandle);
+                engulfingCandle,
+                lindaMACD,
+                turtleSignal,
+                hammerAndShootingStars);
     }
 }

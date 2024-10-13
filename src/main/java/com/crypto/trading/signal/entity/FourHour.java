@@ -53,6 +53,15 @@ public record FourHour(
         @Column("engulfingcandle")
         TradingSignal engulfingCandle,
 
+        @Column("lindamacd")
+        TradingSignal lindaMacd,
+
+        @Column("turtlesignal")
+        TradingSignal turtleSignal,
+
+        @Column("hammershootingcandle")
+        TradingSignal hammerAndShootingCandle,
+
         @Version
         @Column("version")
         Integer version
@@ -71,6 +80,9 @@ public record FourHour(
                 signal.rsiDivergence(),
                 signal.stochastic(),
                 signal.engulfingCandle(),
+                signal.lindaMACD(),
+                signal.turtleSignal(),
+                signal.hammerAndShootingStars(),
                 version);
     }
 }

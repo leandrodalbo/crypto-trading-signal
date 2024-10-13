@@ -13,6 +13,9 @@ CREATE TABLE oneday (
     rsidivergence       varchar(10) NOT NULL,
     stochastic          varchar(10) NOT NULL,
     engulfingcandle     varchar(10) NOT NULL,
+    lindamacd           varchar(10) NOT NULL,
+    turtlesignal        varchar(10) NOT NULL,
+    hammershootingcandle varchar(10) NOT NULL,
     version             integer NOT NULL
 );
 
@@ -31,6 +34,9 @@ CREATE TABLE fourhour (
     rsidivergence       varchar(10) NOT NULL,
     stochastic          varchar(10) NOT NULL,
     engulfingcandle     varchar(10) NOT NULL,
+    lindamacd            varchar(10) NOT NULL,
+    turtlesignal         varchar(10) NOT NULL,
+    hammershootingcandle varchar(10) NOT NULL,
     version             integer NOT NULL
 );
 
@@ -49,5 +55,8 @@ CREATE TABLE onehour (
     rsidivergence       varchar(10) NOT NULL,
     stochastic          varchar(10) NOT NULL,
     engulfingcandle     varchar(10) NOT NULL,
+    lindamacd            varchar(10) NOT NULL,
+    turtlesignal         varchar(10) NOT NULL,
+    hammershootingcandle varchar(10) NOT NULL,
     version             integer NOT NULL
 );
