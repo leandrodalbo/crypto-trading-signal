@@ -13,7 +13,7 @@ public class OneHourTest {
     @Test
     public void willCreateAnInstanceFromASignal() {
         int version = 1;
-        Signal signal = new Signal("BTCUSDT", Timeframe.D1, SignalStrength.STRONG, SignalStrength.MEDIUM, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
+        Signal signal = new Signal("BTCUSDT", Timeframe.D1, SignalStrength.STRONG, SignalStrength.MEDIUM, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL,TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
 
         OneHour oneHour = OneHour.fromSignal(signal, version);
 
@@ -27,6 +27,9 @@ public class OneHourTest {
         assertThat(oneHour.rsiDivergence()).isEqualTo(signal.rsiDivergence());
         assertThat(oneHour.stochastic()).isEqualTo(signal.stochastic());
         assertThat(oneHour.engulfingCandle()).isEqualTo(signal.engulfingCandle());
+        assertThat(oneHour.lindaMacd()).isEqualTo(signal.lindaMACD());
+        assertThat(oneHour.turtleSignal()).isEqualTo(signal.turtleSignal());
+        assertThat(oneHour.hammerAndShootingCandle()).isEqualTo(signal.hammerAndShootingStars());
         assertThat(oneHour.version()).isEqualTo(version);
     }
 }

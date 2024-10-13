@@ -11,8 +11,11 @@ INSERT INTO oneday(symbol,
     rsidivergence  ,
     stochastic     ,
     engulfingcandle,
+    lindamacd,
+    turtlesignal,
+    hammershootingcandle,
     version)
-VALUES('BTCUSDT',1727523225, 'STRONG', 'LOW' ,'BUY','BUY', 'SELL', 'BUY', 'SELL', 'NONE', 'NONE', 'SELL', 'NONE', 0);
+VALUES('BTCUSDT',1727523225, 'STRONG', 'LOW' ,'BUY','BUY', 'SELL', 'BUY', 'SELL', 'NONE', 'NONE', 'SELL', 'NONE', 'SELL', 'NONE', 'NONE', 0);
 
 INSERT INTO onehour(symbol,
     signaltime,
@@ -27,8 +30,11 @@ INSERT INTO onehour(symbol,
     rsidivergence  ,
     stochastic     ,
     engulfingcandle,
+    lindamacd,
+    turtlesignal,
+    hammershootingcandle,
     version)
-VALUES('BTCUSDT',1727523225, 'MEDIUM','STRONG', 'BUY','BUY', 'SELL', 'BUY', 'SELL', 'NONE', 'NONE', 'SELL', 'NONE', 0);
+VALUES('BTCUSDT',1727523225, 'MEDIUM','STRONG', 'BUY','BUY', 'SELL', 'BUY', 'SELL', 'NONE', 'NONE', 'SELL', 'NONE', 'SELL', 'NONE', 'NONE', 0);
 
 INSERT INTO fourhour(symbol,
      signaltime,
@@ -43,5 +49,8 @@ INSERT INTO fourhour(symbol,
      rsidivergence  ,
      stochastic     ,
      engulfingcandle,
+     lindamacd,
+     turtlesignal,
+     hammershootingcandle,
      version)
-VALUES('BTCUSDT',1727523225, 'LOW' ,'STRONG','BUY','BUY', 'SELL', 'BUY', 'SELL', 'NONE', 'NONE', 'SELL', 'NONE', 0);
+VALUES('BTCUSDT',1727523225, 'LOW' ,'STRONG','BUY','BUY', 'SELL', 'BUY', 'SELL', 'NONE', 'NONE', 'SELL', 'NONE', 'SELL', 'NONE', 'NONE', 0);

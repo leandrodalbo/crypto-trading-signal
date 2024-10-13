@@ -13,7 +13,7 @@ public class OneDayTest {
     @Test
     public void willCreateAnInstanceFromASignal() {
         int version = 1;
-        Signal signal = new Signal("BTCUSDT", Timeframe.D1, SignalStrength.STRONG, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
+        Signal signal = new Signal("BTCUSDT", Timeframe.D1, SignalStrength.STRONG, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL, TradingSignal.BUY, TradingSignal.NONE, TradingSignal.SELL);
 
         OneDay oneDay = OneDay.fromSignal(signal, version);
 
@@ -27,6 +27,9 @@ public class OneDayTest {
         assertThat(oneDay.rsiDivergence()).isEqualTo(signal.rsiDivergence());
         assertThat(oneDay.stochastic()).isEqualTo(signal.stochastic());
         assertThat(oneDay.engulfingCandle()).isEqualTo(signal.engulfingCandle());
+        assertThat(oneDay.lindaMacd()).isEqualTo(signal.lindaMACD());
+        assertThat(oneDay.turtleSignal()).isEqualTo(signal.turtleSignal());
+        assertThat(oneDay.hammerAndShootingCandle()).isEqualTo(signal.hammerAndShootingStars());
         assertThat(oneDay.version()).isEqualTo(version);
     }
 }
