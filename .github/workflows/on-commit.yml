@@ -1,9 +1,14 @@
 name: Build and run unit-tests
-on: push
+on:
+  push:
+    branches:
+      - '*'
+      - '!master'
+      - '!main'
 
 jobs:
   build:
-    name: Build and run unit-tests
+    name: Build and Test
     runs-on: ubuntu-22.04
     permissions:
       contents: read
