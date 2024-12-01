@@ -10,17 +10,17 @@ spring:
   application:
     name: crypto-trading-signal
   r2dbc:
-    username: user
-    password: password
-    url: r2dbc:postgresql://localhost:5432/tradingsignal
+    username: ${DB_USER:user}
+    password: ${DB_PASSWORD:password}
+    url:  r2dbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:tradingsignal}
   flyway:
-    url: jdbc:postgresql://localhost:5432/tradingsignal
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:tradingsignal}
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: user
-    password: password
+    host: ${RABBIT_HOST:localhost}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USER:user}
+    password: ${RABBIT_PASSWORD:password}
 
 
