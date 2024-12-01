@@ -1,0 +1,12 @@
+name: Publish Image
+on:
+  push:
+    branches:
+      - main
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: leandrodalbo/tradingsignalsapi
+  VERSION: latest
+
+jobs:
+  uses: commit-build.yml@current-branch
