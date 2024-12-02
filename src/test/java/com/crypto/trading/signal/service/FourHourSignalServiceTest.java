@@ -30,19 +30,6 @@ public class FourHourSignalServiceTest {
 
 
     @Test
-    void shouldFindAllSymbols() {
-        when(fourHourRepository.findAll()).thenReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.STRONG, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
-
-        Flux<FourHour> result = fourHourSignalService.getAll();
-
-        StepVerifier.create(result)
-                .thenConsumeWhile(it -> !it.symbol().isEmpty())
-                .verifyComplete();
-
-        verify(fourHourRepository, times(1)).findAll();
-    }
-
-    @Test
     void shouldFindSellStrongSignals() {
         when(fourHourRepository.findBySellStrength(any())).thenReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().minus(Duration.ofHours(1)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 

@@ -29,36 +29,23 @@ public class SignalController {
         this.fourHourSignalService = fourHourSignalService;
     }
 
-    @GetMapping("/oneday/all")
-    public Flux<OneDay> findAllOneDay() {
-        return daySignalService.getAll();
-    }
 
     @GetMapping("/oneday")
     public Flux<OneDay> findOneDayBySignalStrength(@RequestParam TradingSignal signal,
-                                                   @RequestParam SignalStrength strength) {
-        return daySignalService.getByStrength(signal, strength);
+                                                   @RequestParam ExposedSignalStrength strength) {
+        return daySignalService.getByStrength(signal, SignalStrength.fromExposedSignalStrength(strength));
     }
 
-    @GetMapping("/onehour/all")
-    public Flux<OneHour> findAllOneHour() {
-        return hourSignalService.getAll();
-    }
 
     @GetMapping("/onehour")
     public Flux<OneHour> findOneHourBySignalStrength(@RequestParam TradingSignal signal,
-                                                     @RequestParam SignalStrength strength) {
-        return hourSignalService.getByStrength(signal, strength);
-    }
-
-    @GetMapping("/fourhour/all")
-    public Flux<FourHour> findAllFourHour() {
-        return fourHourSignalService.getAll();
+                                                     @RequestParam ExposedSignalStrength strength) {
+        return hourSignalService.getByStrength(signal, SignalStrength.fromExposedSignalStrength(strength));
     }
 
     @GetMapping("/fourhour")
     public Flux<FourHour> findFourHourBySignalStrength(@RequestParam TradingSignal signal,
-                                                       @RequestParam SignalStrength strength) {
-        return fourHourSignalService.getByStrength(signal, strength);
+                                                       @RequestParam ExposedSignalStrength strength) {
+        return fourHourSignalService.getByStrength(signal, SignalStrength.fromExposedSignalStrength(strength));
     }
 }

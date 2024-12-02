@@ -11,11 +11,3 @@ services:
       - POSTGRES_PASSWORD=password
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-  signalsRabbit:
-    image: "rabbitmq:3.10-management"
-    container_name: "traded-signal-rabbit"
-    ports:
-      - 5672:5672
-      - 15672:15672
-    volumes:
-      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
