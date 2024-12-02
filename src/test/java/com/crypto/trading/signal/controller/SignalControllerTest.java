@@ -38,44 +38,6 @@ public class SignalControllerTest {
     @MockBean
     private FourHourSignalService fourHourSignalService;
 
-    @Test
-    void shouldGetAllOneHour() {
-        given(oneHourSignalService.getAll()).willReturn(Flux.just(new OneHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
-
-        client.get()
-                .uri("/signals/onehour/all")
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
-
-        verify(oneHourSignalService, times(1)).getAll();
-    }
-
-    @Test
-    void shouldGetAllOneDay() {
-        given(oneDaySignalService.getAll()).willReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
-
-        client.get()
-                .uri("/signals/oneday/all")
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
-
-        verify(oneDaySignalService, times(1)).getAll();
-    }
-
-    @Test
-    void shouldGetAllFourHour() {
-        given(fourHourSignalService.getAll()).willReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
-
-        client.get()
-                .uri("/signals/fourhour/all")
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
-
-        verify(fourHourSignalService, times(1)).getAll();
-    }
 
     @Test
     void shouldFailWithInvalidSignalAndStrengthValues() {
@@ -119,7 +81,7 @@ public class SignalControllerTest {
                 .uri(uriBuilder -> uriBuilder
                         .path("/signals/onehour")
                         .queryParam("signal", TradingSignal.BUY)
-                        .queryParam("strength", SignalStrength.LOW)
+                        .queryParam("strength", ExposedSignalStrength.MEDIUM)
                         .build())
                 .exchange()
                 .expectStatus()
@@ -136,7 +98,7 @@ public class SignalControllerTest {
                 .uri(uriBuilder -> uriBuilder
                         .path("/signals/fourhour")
                         .queryParam("signal", TradingSignal.BUY)
-                        .queryParam("strength", SignalStrength.LOW)
+                        .queryParam("strength", ExposedSignalStrength.STRONG)
                         .build())
                 .exchange()
                 .expectStatus()
@@ -153,7 +115,7 @@ public class SignalControllerTest {
                 .uri(uriBuilder -> uriBuilder
                         .path("/signals/oneday")
                         .queryParam("signal", TradingSignal.BUY)
-                        .queryParam("strength", SignalStrength.LOW)
+                        .queryParam("strength", ExposedSignalStrength.STRONG)
                         .build())
                 .exchange()
                 .expectStatus()

@@ -20,10 +20,6 @@ public class FourHourSignalService {
         this.fourHourRepository = fourHourRepository;
     }
 
-    public Flux<FourHour> getAll() {
-        return fourHourRepository.findAll();
-    }
-
     public Flux<FourHour> getByStrength(TradingSignal signal, SignalStrength strength) {
 
         if (TradingSignal.SELL.equals(signal))

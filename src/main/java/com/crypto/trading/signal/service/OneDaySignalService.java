@@ -1,6 +1,5 @@
 package com.crypto.trading.signal.service;
 
-import com.crypto.trading.signal.entity.FourHour;
 import com.crypto.trading.signal.entity.OneDay;
 import com.crypto.trading.signal.model.SignalStrength;
 import com.crypto.trading.signal.model.TradingSignal;
@@ -19,10 +18,6 @@ public class OneDaySignalService {
 
     public OneDaySignalService(OneDayRepository oneDayRepository) {
         this.oneDayRepository = oneDayRepository;
-    }
-
-    public Flux<OneDay> getAll() {
-        return this.oneDayRepository.findAll();
     }
 
     public Flux<OneDay> getByStrength(TradingSignal signal, SignalStrength strength) {

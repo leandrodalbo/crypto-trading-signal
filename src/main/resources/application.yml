@@ -17,10 +17,5 @@ spring:
     url: jdbc:postgresql://localhost:5432/tradingsignal
     user: user
     password: password
-  rabbitmq:
-    host: localhost
-    port: 5671
-    username: user
-    password: password
 
 

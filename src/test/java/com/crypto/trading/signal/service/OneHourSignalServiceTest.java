@@ -29,18 +29,6 @@ public class OneHourSignalServiceTest {
     @Mock
     OneHourRepository oneHourRepository;
 
-    @Test
-    void shouldFindAllSymbols() {
-        when(oneHourRepository.findAll()).thenReturn(Flux.just(new OneHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.STRONG, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
-
-        Flux<OneHour> result = service.getAll();
-
-        StepVerifier.create(result)
-                .thenConsumeWhile(it -> !it.symbol().isEmpty())
-                .verifyComplete();
-
-        verify(oneHourRepository, times(1)).findAll();
-    }
 
     @Test
     void shouldFindSellStrongSignals() {

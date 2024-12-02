@@ -31,19 +31,6 @@ public class OneDaySignalServiceTest {
     OneDayRepository oneDayRepository;
 
     @Test
-    void willFindAllRecords() {
-        when(oneDayRepository.findAll()).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
-
-        Flux<OneDay> result = service.getAll();
-
-        StepVerifier.create(result)
-                .thenConsumeWhile(it -> !it.symbol().isEmpty())
-                .verifyComplete();
-
-        verify(oneDayRepository, times(1)).findAll();
-    }
-
-    @Test
     void shouldFindSellStrongSignals() {
         when(oneDayRepository.findBySellStrength(any())).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
