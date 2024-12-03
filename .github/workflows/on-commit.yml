@@ -15,7 +15,7 @@ jobs:
       - name: Set env
         run: echo "VERSION=$(echo $GITHUB_SHA)" >> $GITHUB_ENV
       - name: Test
-        run: echo $VERSION
+        run: echo ${{ VERSION }}
   useVersion:
     runs-on: ubuntu-latest
     needs: [setVersion]
