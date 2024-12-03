@@ -78,9 +78,6 @@ jobs:
     runs-on: ubuntu-latest
 
     needs: [ build, package]
-    defaults:
-      run:
-        working-directory: terraform
     steps:
       - name: Set Variable
         run: echo TF_VAR_image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} >> $GITHUB_ENV
@@ -96,20 +93,25 @@ jobs:
 
       - name: Terraform Init
         id: init
+        working-directory: terraform
         run: terraform init -backend-config="key=$STATE_BUCKET_KEY" -backend-config="bucket=$STATE_BUCKET" -backend-config="region=$TF_VAR_region"
 
       - name: code format
         id: fmt
+        working-directory: terraform
         run: terraform fmt -check
 
       - name: Recreate Plan
         id: plan
+        working-directory: terraform
         run: terraform plan -no-color -var-file=prod.tfvars
         continue-on-error: true
 
       - name: Exit on Plan Failure
+        working-directory: terraform
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
       - name: Recreate
+        working-directory: terraform
         run: terraform apply -auto-approve -var-file=prod.tfvars
