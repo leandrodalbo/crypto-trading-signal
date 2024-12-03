@@ -19,9 +19,19 @@ env:
   TF_VAR_dbname: ${{ secrets.DBNAME }}
   TF_VAR_dbuser: ${{ secrets.DBUSER }}
   TF_VAR_port: ${{ secrets.APP_PORT }}
-  TF_VAR_image: ghcr.io/leandrodalbo/tradingsignalsapi:${GITHUB_SHA}
 
 jobs:
+  imageenv:
+    name: Set Image Env
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Set Variable
+        run: echo TF_VAR_image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} >> $GITHUB_ENV
+      - name: Show Variable
+        run: echo $TF_VAR_image
   build:
     name: Build
     runs-on: ubuntu-22.04
