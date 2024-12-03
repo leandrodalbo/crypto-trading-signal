@@ -88,7 +88,6 @@ jobs:
       TF_VAR_dbname: ${{ secrets.DBNAME }}
       TF_VAR_dbuser: ${{ secrets.DBUSER }}
       TF_VAR_port: ${{ secrets.APP_PORT }}
-      TF_VAR_image: ${TF_VAR_image}
     needs: [ build, package]
     defaults:
       run:
