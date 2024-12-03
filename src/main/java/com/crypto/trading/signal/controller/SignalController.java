@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import reactor.core.publisher.Flux;
+import java.util.List;
 
 @RestController
 @RequestMapping("/signals")
@@ -31,20 +31,20 @@ public class SignalController {
 
 
     @GetMapping("/oneday")
-    public Flux<OneDay> findOneDayBySignalStrength(@RequestParam TradingSignal signal,
+    public List<OneDay> findOneDayBySignalStrength(@RequestParam TradingSignal signal,
                                                    @RequestParam ExposedSignalStrength strength) {
         return daySignalService.getByStrength(signal, SignalStrength.fromExposedSignalStrength(strength));
     }
 
 
     @GetMapping("/onehour")
-    public Flux<OneHour> findOneHourBySignalStrength(@RequestParam TradingSignal signal,
+    public List<OneHour> findOneHourBySignalStrength(@RequestParam TradingSignal signal,
                                                      @RequestParam ExposedSignalStrength strength) {
         return hourSignalService.getByStrength(signal, SignalStrength.fromExposedSignalStrength(strength));
     }
 
     @GetMapping("/fourhour")
-    public Flux<FourHour> findFourHourBySignalStrength(@RequestParam TradingSignal signal,
+    public List<FourHour> findFourHourBySignalStrength(@RequestParam TradingSignal signal,
                                                        @RequestParam ExposedSignalStrength strength) {
         return fourHourSignalService.getByStrength(signal, SignalStrength.fromExposedSignalStrength(strength));
     }

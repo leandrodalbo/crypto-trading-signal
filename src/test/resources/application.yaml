@@ -1,10 +1,10 @@
 spring:
   application:
     name: crypto-trading-signal
-  r2dbc:
+  datasource:
     username: user
     password: password
-    url: r2dbc:postgresql://localhost:5432/tradingsignal
+    url: jdbc:postgresql://localhost:5432/tradingsignal
   flyway:
     enabled: false
   sql:

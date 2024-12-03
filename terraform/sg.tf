@@ -13,7 +13,7 @@ resource "aws_security_group_rule" "app_http_inbound" {
   protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
 
-  }
+}
 
 resource "aws_security_group_rule" "app_all_outbound" {
   type              = "egress"

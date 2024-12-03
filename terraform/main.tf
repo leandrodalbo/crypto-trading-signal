@@ -9,11 +9,11 @@ provider "aws" {
 }
 
 data "terraform_remote_state" "resources" {
-    backend = "s3"
-    config = {
-      region = "${var.region}"
-      bucket = "${var.resources_bucket}"
-      key = "${var.resources_bucket_key}"
-    }
+  backend = "s3"
+  config = {
+    region = "${var.region}"
+    bucket = "${var.resources_bucket}"
+    key    = "${var.resources_bucket_key}"
+  }
 }
 

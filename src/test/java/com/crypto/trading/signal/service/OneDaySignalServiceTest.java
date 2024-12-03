@@ -9,12 +9,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import reactor.core.publisher.Flux;
-import reactor.test.StepVerifier;
-
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -32,53 +31,42 @@ public class OneDaySignalServiceTest {
 
     @Test
     void shouldFindSellStrongSignals() {
-        when(oneDayRepository.findBySellStrength(any())).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        when(oneDayRepository.findBySellStrength(any())).thenReturn(List.of(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
-        Flux<OneDay> result = service.getByStrength(TradingSignal.SELL, SignalStrength.STRONG);
-
-        StepVerifier.create(result)
-                .thenConsumeWhile(it -> SignalStrength.STRONG.equals(it.sellStrength()))
-                .verifyComplete();
-
+        List<OneDay> result = service.getByStrength(TradingSignal.SELL, SignalStrength.STRONG);
+        assertTrue(result.stream().filter(it -> !SignalStrength.STRONG.equals(it.sellStrength()))
+                .toList().isEmpty());
         verify(oneDayRepository, times(1)).findBySellStrength(any());
     }
 
     @Test
     void shouldFindBuyLowSignals() {
-        when(oneDayRepository.findByBuyStrength(any())).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        when(oneDayRepository.findByBuyStrength(any())).thenReturn(List.of(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
-        Flux<OneDay> result = service.getByStrength(TradingSignal.BUY, SignalStrength.LOW);
+        List<OneDay> result = service.getByStrength(TradingSignal.BUY, SignalStrength.LOW);
 
-        StepVerifier.create(result)
-                .thenConsumeWhile(it -> SignalStrength.LOW.equals(it.buyStrength()))
-                .verifyComplete();
-
+        assertTrue(result.stream().filter(it -> !SignalStrength.LOW.equals(it.buyStrength()))
+                .toList().isEmpty());
         verify(oneDayRepository, times(1)).findByBuyStrength(any());
     }
 
     @Test
     void shouldFilterOldBuySignals() {
-        when(oneDayRepository.findByBuyStrength(any())).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().minus(Duration.ofHours(65)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        when(oneDayRepository.findByBuyStrength(any())).thenReturn(List.of(new OneDay("BTCUSDT", Instant.now().minus(Duration.ofHours(65)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
-        Flux<OneDay> result = service.getByStrength(TradingSignal.BUY, SignalStrength.LOW);
+        List<OneDay> result = service.getByStrength(TradingSignal.BUY, SignalStrength.LOW);
 
-        StepVerifier.create(result)
-                .expectSubscription()
-                .verifyComplete();
-
+        assertTrue(result.isEmpty());
         verify(oneDayRepository, times(1)).findByBuyStrength(any());
     }
 
     @Test
     void shouldFilterOldSellSignals() {
-        when(oneDayRepository.findBySellStrength(any())).thenReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().minus(Duration.ofHours(55)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+        when(oneDayRepository.findBySellStrength(any())).thenReturn(List.of(new OneDay("BTCUSDT", Instant.now().minus(Duration.ofHours(55)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
-        Flux<OneDay> result = service.getByStrength(TradingSignal.SELL, SignalStrength.STRONG);
+        List<OneDay> result = service.getByStrength(TradingSignal.SELL, SignalStrength.STRONG);
 
-        StepVerifier.create(result)
-                .expectSubscription()
-                .verifyComplete();
-
+        assertTrue(result.isEmpty());
         verify(oneDayRepository, times(1)).findBySellStrength(any());
     }
 }

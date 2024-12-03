@@ -27,29 +27,16 @@ variable "app_name" {
 }
 
 
-variable "ecs_image_url"{
+variable "ecs_image_url" {
   type = string
 }
 
 
-variable "container_port"{
-  type = string
-}
-
-
-variable "ecs_image_url"{
-  type = string
-}
-
-variable "ecs_image_url"{
+variable "container_port" {
   type = string
 }
 
 variable "postgres_user_name" {
-  type = string
-}
-
-variable "postgres_user_password" {
   type = string
 }
 

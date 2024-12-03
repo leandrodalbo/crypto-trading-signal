@@ -1,18 +1,18 @@
 server:
   port: 8298
 springdoc:
+  api-docs:
+    path: /api-docs
   swagger-ui:
     enabled: true
-    path: /tradingsignals/swagger.html
-  api-docs:
-    path: /tradingsignals/docs
+    path: /swagger-ui/
 spring:
   application:
     name: crypto-trading-signal
-  r2dbc:
+  datasource:
     username: user
     password: password
-    url:  r2dbc:postgresql://localhost:5432/tradingsignal
+    url:  jdbc:postgresql://localhost:5432/tradingsignal
   flyway:
     url: jdbc:postgresql://localhost:5432/tradingsignal
     user: user
