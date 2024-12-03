@@ -5,10 +5,10 @@ import com.crypto.trading.signal.model.SignalStrength;
 import com.crypto.trading.signal.model.TradingSignal;
 import com.crypto.trading.signal.repository.OneDayRepository;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
 
 @Service
@@ -20,13 +20,17 @@ public class OneDaySignalService {
         this.oneDayRepository = oneDayRepository;
     }
 
-    public Flux<OneDay> getByStrength(TradingSignal signal, SignalStrength strength) {
+    public List<OneDay> getByStrength(TradingSignal signal, SignalStrength strength) {
 
         if (TradingSignal.SELL.equals(signal))
             return this.oneDayRepository.findBySellStrength(strength)
-                    .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(48))));
+                    .stream()
+                    .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(48))))
+                    .toList();
 
         return this.oneDayRepository.findByBuyStrength(strength)
-                .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(48))));
+                .stream()
+                .filter(it -> Instant.ofEpochMilli(it.signalTime()).isAfter(Instant.now().minus(Duration.ofHours(48))))
+                .toList();
     }
 }

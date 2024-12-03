@@ -11,23 +11,28 @@ import com.crypto.trading.signal.service.OneHourSignalService;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Flux;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@WebFluxTest(SignalController.class)
+@WebMvcTest(SignalController.class)
 public class SignalControllerTest {
 
     @Autowired
-    WebTestClient client;
+    private MockMvc mvc;
 
     @MockBean
     private OneDaySignalService oneDaySignalService;
@@ -40,87 +45,68 @@ public class SignalControllerTest {
 
 
     @Test
-    void shouldFailWithInvalidSignalAndStrengthValues() {
+    void shouldFailWithInvalidSignalAndStrengthValues() throws Exception {
 
-        client.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/signals/fourhour")
-                        .queryParam("signal", 1)
-                        .queryParam("strength", SignalStrength.LOW)
-                        .build())
-                .exchange()
-                .expectStatus()
-                .is4xxClientError();
+        MockHttpServletResponse res = mvc.perform(get("/books/abc123")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        assertThat(res.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
-        client.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/signals/onehour")
-                        .queryParam("signal", TradingSignal.BUY)
+        res = mvc.perform(get("/signals/onehour")
+                        .queryParam("signal", TradingSignal.BUY.name())
                         .queryParam("strength", "rubbish")
-                        .build())
-                .exchange()
-                .expectStatus()
-                .is4xxClientError();
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        assertThat(res.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
-        client.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/signals/oneday")
-                        .queryParam("signal", TradingSignal.BUY)
+
+        res = mvc.perform(get("/signals/oneday")
+                        .queryParam("signal", TradingSignal.BUY.name())
                         .queryParam("strength", "")
-                        .build())
-                .exchange()
-                .expectStatus()
-                .is4xxClientError();
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        assertThat(res.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
-    void shouldFindOneHourBySignalAndStrengthValues() {
-        given(oneHourSignalService.getByStrength(any(), any())).willReturn(Flux.just(new OneHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+    void shouldFindOneHourBySignalAndStrengthValues() throws Exception {
+        given(oneHourSignalService.getByStrength(any(), any())).willReturn(List.of(new OneHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
-        client.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/signals/onehour")
-                        .queryParam("signal", TradingSignal.BUY)
-                        .queryParam("strength", ExposedSignalStrength.MEDIUM)
-                        .build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+        MockHttpServletResponse res = mvc.perform(get("/signals/onehour")
+                        .queryParam("signal", TradingSignal.BUY.name())
+                        .queryParam("strength", ExposedSignalStrength.MEDIUM.name())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
 
+        assertThat(res.getStatus()).isEqualTo(HttpStatus.OK.value());
         verify(oneHourSignalService, times(1)).getByStrength(any(), any());
     }
 
     @Test
-    void shouldFindFourHourBySignalAndStrengthValues() {
-        given(fourHourSignalService.getByStrength(any(), any())).willReturn(Flux.just(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+    void shouldFindFourHourBySignalAndStrengthValues() throws Exception {
+        given(fourHourSignalService.getByStrength(any(), any())).willReturn(List.of(new FourHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
-        client.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/signals/fourhour")
-                        .queryParam("signal", TradingSignal.BUY)
-                        .queryParam("strength", ExposedSignalStrength.STRONG)
-                        .build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+        MockHttpServletResponse res = mvc.perform(get("/signals/fourhour")
+                        .queryParam("signal", TradingSignal.BUY.name())
+                        .queryParam("strength", ExposedSignalStrength.STRONG.name())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
 
+        assertThat(res.getStatus()).isEqualTo(HttpStatus.OK.value());
         verify(fourHourSignalService, times(1)).getByStrength(any(), any());
     }
 
     @Test
-    void shouldFindOneDayBySignalAndStrengthValues() {
-        given(oneDaySignalService.getByStrength(any(), any())).willReturn(Flux.just(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
+    void shouldFindOneDayBySignalAndStrengthValues() throws Exception {
+        given(oneDaySignalService.getByStrength(any(), any())).willReturn(List.of(new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.LOW, SignalStrength.LOW, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
 
-        client.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/signals/oneday")
-                        .queryParam("signal", TradingSignal.BUY)
-                        .queryParam("strength", ExposedSignalStrength.STRONG)
-                        .build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+        MockHttpServletResponse res = mvc.perform(get("/signals/oneday")
+                        .queryParam("signal", TradingSignal.BUY.name())
+                        .queryParam("strength", ExposedSignalStrength.STRONG.name())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
 
+        assertThat(res.getStatus()).isEqualTo(HttpStatus.OK.value());
         verify(oneDaySignalService, times(1)).getByStrength(any(), any());
     }
 
