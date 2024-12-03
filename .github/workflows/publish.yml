@@ -101,7 +101,7 @@ jobs:
       TF_VAR_dbname: ${{ secrets.DBNAME }}
       TF_VAR_dbuser: ${{ secrets.DBUSER }}
       TF_VAR_port: ${{ secrets.APP_PORT }}
-
+      TF_VAR_image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
