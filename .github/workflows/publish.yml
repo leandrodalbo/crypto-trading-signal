@@ -117,9 +117,6 @@ jobs:
         id: fmt
         run: terraform fmt -check
 
-      - name: Destroy Existing Service
-        run: terraform apply -auto-approve -var-file=prod.tfvars
-
       - name: Recreate Plan
         id: plan
         run: terraform plan -no-color -var-file=prod.tfvars
