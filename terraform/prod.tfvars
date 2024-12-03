@@ -1,3 +1,3 @@
-env           = "prod"
-app_name      = "tradingsignalsapi"
-ecs_image_url = "ghcr.io/leandrodalbo/tradingsignalsapi:latest"
+env     = "prod"
+appname = "tradingsignalsapi"
+image   = "ghcr.io/leandrodalbo/tradingsignalsapi:latest"

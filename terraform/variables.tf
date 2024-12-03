@@ -22,25 +22,23 @@ variable "env" {
   type = string
 }
 
-variable "app_name" {
+variable "appname" {
   type = string
 }
 
-
-variable "ecs_image_url" {
+variable "image" {
   type = string
 }
 
-
-variable "container_port" {
+variable "port" {
   type = string
 }
 
-variable "postgres_user_name" {
+variable "dbuser" {
   type = string
 }
 
-variable "postgres_db_name" {
+variable "dbname" {
   type = string
 }
 
