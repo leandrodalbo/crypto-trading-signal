@@ -5,8 +5,7 @@ on:
       - '*'
       - '!master'
       - '!main'
-env:
-  VERSION: latest
+
 
 jobs:
   setVersion:
