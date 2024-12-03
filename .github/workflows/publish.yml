@@ -7,17 +7,9 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: leandrodalbo/tradingsignalsapi
-  VERSION: latest
+  VERSION: ${GITHUB_SHA}
 
 jobs:
-  setVersion:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set env
-        run: echo "VERSION=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
-      - name: Test
-        run: echo $VERSION
   build:
     name: Build
     runs-on: ubuntu-22.04
@@ -53,7 +45,7 @@ jobs:
   package:
     name: Package and Publish
     if: ${{ github.ref == 'refs/heads/main' }}
-    needs: [setVersion ,  build ]
+    needs: [ build ]
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -97,7 +89,7 @@ jobs:
   terraform:
     name: "Deploy Fargate Tasks"
     runs-on: ubuntu-latest
-    needs: [setVersion, build, package]
+    needs: [ build, package]
     defaults:
       run:
         working-directory: terraform
