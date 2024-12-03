@@ -6,35 +6,7 @@ on:
       - '!master'
       - '!main'
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: leandrodalbo/tradingsignalsapi
-  VERSION: ${GITHUB_SHA}
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
-  TF_VAR_aws_access_key: ${{ secrets.AWS_KEY }}
-  TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET }}
-  STATE_BUCKET_KEY: ${{ secrets.STATE_KEY }}
-  STATE_BUCKET: ${{ secrets.STATE }}
-  TF_VAR_resources_bucket: ${{ secrets.STATE }}
-  TF_VAR_resources_bucket_key: ${{ secrets.RESOURCES_BUCKET_KEY }}
-  TF_VAR_region: ${{ secrets.AWS_REGION }}
-  TF_VAR_dbname: ${{ secrets.DBNAME }}
-  TF_VAR_dbuser: ${{ secrets.DBUSER }}
-  TF_VAR_port: ${{ secrets.APP_PORT }}
-
 jobs:
-  imageenv:
-    name: Set Image Env
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: read
-      security-events: write
-    steps:
-      - name: Set Variable
-        run: echo TF_VAR_image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} >> $GITHUB_ENV
-      - name: Show Variable
-        run: echo $TF_VAR_image
   build:
     name: Build and Test
     runs-on: ubuntu-22.04
