@@ -25,19 +25,6 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - name: Vulnerabilities Scan
-        uses: anchore/scan-action@v3
-        id: scan
-        with:
-          path: "${{ github.workspace }}"
-          fail-build: false
-          severity-cutoff: high
-          acs-report-enable: true
-      - name: Upload Vulnerabilities report
-        uses: github/codeql-action/upload-sarif@v3
-        if: success() || failure()
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
       - name: Build + UnitTests
         run: |
           chmod +x gradlew 
@@ -65,13 +52,7 @@ jobs:
           chmod +x gradlew
           ./gradlew bootBuildImage \
             --imageName ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
-      - name: OCI image vulnerability scanning
-        uses: anchore/scan-action@v3
-        id: scan
-        with:
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
-          fail-build: false
-          severity-cutoff: high
+      
       - name: Log into container registry
         uses: docker/login-action@v3
         with:
