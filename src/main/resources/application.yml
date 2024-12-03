@@ -5,7 +5,7 @@ springdoc:
     path: /api-docs
   swagger-ui:
     enabled: true
-    path: /swagger-ui/
+    path: /apidocs/
 spring:
   application:
     name: crypto-trading-signal
