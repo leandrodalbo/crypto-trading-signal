@@ -1,3 +1,7 @@
+resource "aws_cloudwatch_log_group" "applogs" {
+  name = "${var.env}-${var.appname}-logs"
+}
+
 data "template_file" "tasktemplate" {
   template = file("task.json")
 
@@ -10,6 +14,7 @@ data "template_file" "tasktemplate" {
     dbpwd       = data.terraform_remote_state.resources.outputs.dbpswd
     dbuser      = var.dbuser
     dbname      = var.dbname
+    logsgroupid = aws_cloudwatch_log_group.applogs.id
   }
 }
 

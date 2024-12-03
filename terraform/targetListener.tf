@@ -35,6 +35,3 @@ resource "aws_alb_listener" "alb-listener" {
   depends_on = [aws_alb_target_group.apptg]
 }
 
-resource "aws_cloudwatch_log_group" "applogs" {
-  name = "${var.env}-${var.appname}-logs"
-}
