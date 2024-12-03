@@ -1,73 +1,59 @@
-resource "aws_ecs_cluster" "signals_cluster" {
-  name = "${var.env}-${var.app_name}-cluster"
-
-  tags = {
-    Name        = "${var.env}-${var.app_name}-ecs"
-    Environment = var.env
-  }
-}
-
-resource "aws_cloudwatch_log_group" "app_log_group" {
-  name = "${var.env}-${var.app_name}-logs"
+resource "aws_cloudwatch_log_group" "applogs" {
+  name = "${var.env}-${var.appname}-logs"
 }
 
 data "template_file" "tasktemplate" {
   template = file("task.json")
 
   vars = {
-    image_url        = var.ecs_image_url
-    container_port   = var.container_port
-    ecs_service_name = "${var.env}-${var.app_name}"
-    region           = var.region
-    db_user          = var.postgres_user_name
-    db_password      = data.terraform_remote_state.resources.outputs.dbpassword
-    db_name          = var.postgres_db_name
-    logs_group_id    = aws_cloudwatch_log_group.app_log_group.id
-    db_host          = data.terraform_remote_state.resources.outputs.dbhost
-
+    servicename = var.appname
+    image       = var.image
+    port        = var.port
+    region      = var.region
+    dbhost      = data.terraform_remote_state.resources.outputs.dbhost
+    dbpwd       = data.terraform_remote_state.resources.outputs.dbpswd
+    dbuser      = var.dbuser
+    dbname      = var.dbname
+    logsgroupid = aws_cloudwatch_log_group.applogs.id
   }
-
 }
 
-
-resource "aws_ecs_task_definition" "signals_task_definition" {
+resource "aws_ecs_task_definition" "task_definition" {
   container_definitions    = data.template_file.tasktemplate.rendered
-  family                   = "${var.app_name}-task"
+  family                   = "${var.env}_${var.appname}"
   cpu                      = 2048
   memory                   = 4096
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  execution_role_arn       = aws_iam_role.fargate_role.arn
-  task_role_arn            = aws_iam_role.fargate_role.arn
-
-  depends_on = [ aws_iam_role.fargate_role ]
-
+  execution_role_arn       = data.terraform_remote_state.resources.outputs.cluster_role_arn
+  task_role_arn            = data.terraform_remote_state.resources.outputs.cluster_role_arn
 }
 
-
-
 resource "aws_ecs_service" "aws-ecs-service" {
-  name                 = "${var.env}-${var.app_name}"
-  cluster              =  aws_ecs_cluster.signals_cluster.id
-  task_definition      =  aws_ecs_task_definition.signals_task_definition.arn
-  launch_type          =  "FARGATE"
-  desired_count        =  2
-  force_new_deployment =  true
+  name            = var.appname
+  cluster         = data.terraform_remote_state.resources.outputs.clustername
+  task_definition = aws_ecs_task_definition.task_definition.id
+  launch_type     = "FARGATE"
+  desired_count   = 2
+
 
   network_configuration {
-    subnets          = [data.terraform_remote_state.resources.outputs.public_subnet_a_id, data.terraform_remote_state.resources.outputs.public_subnet_b_id]
+    subnets = [
+      data.terraform_remote_state.resources.outputs.private_subnet_a_id,
+      data.terraform_remote_state.resources.outputs.private_subnet_b_id,
+      data.terraform_remote_state.resources.outputs.private_subnet_c_id
+    ]
     assign_public_ip = false
     security_groups = [
-      aws_security_group.ecs_app_sg.id,
-      data.terraform_remote_state.resources.outputs.alb_sg_id
+      aws_security_group.appsg.id
     ]
+
   }
 
   load_balancer {
-    target_group_arn = data.terraform_remote_state.resources.outputs.alb_tg_arn
-    container_name   = "${var.env}-${var.app_name}"
-    container_port   = var.container_port
+    target_group_arn = aws_alb_target_group.apptg.arn
+    container_name   = var.appname
+    container_port   = var.port
   }
 
-  depends_on = [ aws_ecs_task_definition.signals_task_definition ]
 }
