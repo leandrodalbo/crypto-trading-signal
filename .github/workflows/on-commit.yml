@@ -5,19 +5,8 @@ on:
       - '*'
       - '!master'
       - '!main'
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: leandrodalbo/tradingsignalsapi
-  VERSION: ${GITHUB_SHA}
-
 
 jobs:
-  useVersion:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Test
-        run: echo ${{ env.VERSION }}
   build:
     name: Build and Test
     runs-on: ubuntu-22.04
