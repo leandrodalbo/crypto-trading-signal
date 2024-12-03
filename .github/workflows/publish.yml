@@ -7,6 +7,19 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: leandrodalbo/tradingsignalsapi
   VERSION: ${GITHUB_SHA}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
+  TF_VAR_aws_access_key: ${{ secrets.AWS_KEY }}
+  TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET }}
+  STATE_BUCKET_KEY: ${{ secrets.STATE_KEY }}
+  STATE_BUCKET: ${{ secrets.STATE }}
+  TF_VAR_resources_bucket: ${{ secrets.STATE }}
+  TF_VAR_resources_bucket_key: ${{ secrets.RESOURCES_BUCKET_KEY }}
+  TF_VAR_region: ${{ secrets.AWS_REGION }}
+  TF_VAR_dbname: ${{ secrets.DBNAME }}
+  TF_VAR_dbuser: ${{ secrets.DBUSER }}
+  TF_VAR_port: ${{ secrets.APP_PORT }}
+  TF_VAR_image: ghcr.io/leandrodalbo/tradingsignalsapi:${GITHUB_SHA}
 
 jobs:
   build:
@@ -68,21 +81,6 @@ jobs:
     defaults:
       run:
         working-directory: terraform
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
-      TF_VAR_aws_access_key: ${{ secrets.AWS_KEY }}
-      TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET }}
-      STATE_BUCKET_KEY: ${{ secrets.STATE_KEY }}
-      STATE_BUCKET: ${{ secrets.STATE }}
-      TF_VAR_resources_bucket: ${{ secrets.STATE }}
-      TF_VAR_resources_bucket_key: ${{ secrets.RESOURCES_BUCKET_KEY }}
-      TF_VAR_region: ${{ secrets.AWS_REGION }}
-      TF_VAR_dbname: ${{ secrets.DBNAME }}
-      TF_VAR_dbuser: ${{ secrets.DBUSER }}
-      TF_VAR_port: ${{ secrets.APP_PORT }}
-      TF_VAR_image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
