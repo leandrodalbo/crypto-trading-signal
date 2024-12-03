@@ -5,6 +5,7 @@ on:
       - '*'
       - '!master'
       - '!main'
+
 jobs:
   build:
     name: Build and Test
