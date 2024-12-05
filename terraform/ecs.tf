@@ -21,8 +21,8 @@ data "template_file" "tasktemplate" {
 resource "aws_ecs_task_definition" "task_definition" {
   container_definitions    = data.template_file.tasktemplate.rendered
   family                   = "${var.env}_${var.appname}"
-  cpu                      = 2048
-  memory                   = 4096
+  cpu                      = 512
+  memory                   = 1024
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   execution_role_arn       = data.terraform_remote_state.resources.outputs.cluster_role_arn
