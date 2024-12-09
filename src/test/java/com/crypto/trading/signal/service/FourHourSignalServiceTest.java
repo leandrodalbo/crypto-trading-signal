@@ -48,24 +48,4 @@ public class FourHourSignalServiceTest {
                 .toList().isEmpty());
         verify(fourHourRepository, times(1)).findByBuyStrength(any());
     }
-
-    @Test
-    void shouldFilterOldBuySignals() {
-        when(fourHourRepository.findByBuyStrength(any())).thenReturn(List.of(new FourHour("BTCUSDT", Instant.now().minus(Duration.ofHours(25)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
-
-        List<FourHour> result = fourHourSignalService.getByStrength(TradingSignal.BUY, SignalStrength.LOW);
-
-        assertTrue(result.isEmpty());
-        verify(fourHourRepository, times(1)).findByBuyStrength(any());
-    }
-
-    @Test
-    void shouldFilterOldSellSignals() {
-        when(fourHourRepository.findBySellStrength(any())).thenReturn(List.of(new FourHour("BTCUSDT", Instant.now().minus(Duration.ofHours(25)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
-
-        List<FourHour> result = fourHourSignalService.getByStrength(TradingSignal.SELL, SignalStrength.STRONG);
-
-        assertTrue(result.isEmpty());
-        verify(fourHourRepository, times(1)).findBySellStrength(any());
-    }
 }

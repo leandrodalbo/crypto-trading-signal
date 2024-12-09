@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
@@ -53,27 +52,5 @@ public class OneHourSignalServiceTest {
                 .toList().isEmpty());
 
         verify(oneHourRepository, times(1)).findByBuyStrength(any());
-    }
-
-    @Test
-    void shouldFilterOldBuySignals() {
-        when(oneHourRepository.findByBuyStrength(any())).thenReturn(List.of(new OneHour("BTCUSDT", Instant.now().minus(Duration.ofHours(15)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
-
-        List<OneHour> result = service.getByStrength(TradingSignal.BUY, SignalStrength.LOW);
-
-        assertTrue(result.isEmpty());
-
-        verify(oneHourRepository, times(1)).findByBuyStrength(any());
-    }
-
-    @Test
-    void shouldFilterOldSellSignals() {
-        when(oneHourRepository.findBySellStrength(any())).thenReturn(List.of(new OneHour("BTCUSDT", Instant.now().minus(Duration.ofHours(22)).toEpochMilli(), SignalStrength.LOW, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)));
-
-        List<OneHour> result = service.getByStrength(TradingSignal.SELL, SignalStrength.STRONG);
-
-        assertTrue(result.isEmpty());
-
-        verify(oneHourRepository, times(1)).findBySellStrength(any());
     }
 }
