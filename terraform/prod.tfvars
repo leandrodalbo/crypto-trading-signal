@@ -1,3 +1,3 @@
 env      = "prod"
 appname  = "tradingsignalsapi"
-uidomain = "cryptosignalzone.com"
+uidomain = "https://cryptosignalzone.com"
