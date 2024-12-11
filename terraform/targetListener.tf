@@ -25,7 +25,7 @@ resource "aws_alb_listener" "alb-listener" {
   load_balancer_arn = data.terraform_remote_state.resources.outputs.alb_arn
   port              = "443"
   protocol          = "HTTPS"
-  certificate_arn = data.terraform_remote_state.resources.outputs.alb_cert
+  certificate_arn   = data.terraform_remote_state.resources.outputs.alb_cert
 
   default_action {
     type             = "forward"
