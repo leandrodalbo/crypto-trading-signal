@@ -26,6 +26,10 @@ variable "appname" {
   type = string
 }
 
+variable "uidomain" {
+  type = string
+}
+
 variable "image" {
   type = string
 }

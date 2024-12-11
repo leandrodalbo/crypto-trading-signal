@@ -15,6 +15,7 @@ data "template_file" "tasktemplate" {
     dbuser      = var.dbuser
     dbname      = var.dbname
     logsgroupid = aws_cloudwatch_log_group.applogs.id
+    uidomain    = var.uidomain
   }
 }
 
