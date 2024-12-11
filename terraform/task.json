@@ -9,7 +9,8 @@
         { "name": "SPRING_DATASOURCE_URL",  "value": "jdbc:postgresql://${dbhost}:5432/${dbname}"},
         { "name": "SPRING_FLYWAY_USER", "value": "${dbuser}"},
         { "name": "SPRING_FLYWAY_PASSWORD", "value": "${dbpwd}"},
-        { "name": "SPRING_FLYWAY_URL",  "value": "jdbc:postgresql://${dbhost}:5432/${dbname}"}
+        { "name": "SPRING_FLYWAY_URL",  "value": "jdbc:postgresql://${dbhost}:5432/${dbname}"},
+        { "name": "ALLOW_ORIGIN", "value": "${uidomain}"}
       ],
       "portMappings": [{
         "containerPort": ${port},

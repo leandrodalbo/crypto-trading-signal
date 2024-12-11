@@ -18,4 +18,8 @@ spring:
     user: user
     password: password
 
+allow:
+  origin: http://localhost:5173
+
+
 
