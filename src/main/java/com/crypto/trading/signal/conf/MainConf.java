@@ -24,8 +24,7 @@ public class MainConf implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
 
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-        response.setHeader("Access-Control-Allow-Origin", String.format("https://%s",allowOrigin));
-        response.setHeader("Access-Control-Allow-Origin", String.format("https://www.%s",allowOrigin));
+        response.setHeader("Access-Control-Allow-Origin", allowOrigin);
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "GET");
         response.setHeader("Access-Control-Max-Age", "3600");
