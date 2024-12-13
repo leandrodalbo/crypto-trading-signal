@@ -35,7 +35,7 @@ resource "aws_ecs_service" "aws-ecs-service" {
   cluster         = data.terraform_remote_state.resources.outputs.clustername
   task_definition = aws_ecs_task_definition.task_definition.id
   launch_type     = "FARGATE"
-  desired_count   = 2
+  desired_count   = 1
 
 
   network_configuration {
