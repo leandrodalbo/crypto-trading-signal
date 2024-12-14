@@ -19,11 +19,6 @@ public class MainConf implements Filter {
     @Value("${allow.origin}")
     private String allowOrigin;
 
-    private final Set<String> allowed = Set.of(
-            String.format("https://%s", allowOrigin),
-            String.format("https://www.%s", allowOrigin),
-            "https://localhost:5173"
-    );
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -32,7 +27,8 @@ public class MainConf implements Filter {
 
         String origin = request.getHeader("Origin");
 
-        if (origin != null && allowed.contains(origin)) {
+        if (origin != null && origin.contains(allowOrigin)) {
+
             response.setHeader("Access-Control-Allow-Origin", origin);
             response.setHeader("Access-Control-Allow-Credentials", "true");
             response.setHeader("Access-Control-Allow-Methods", "GET");
