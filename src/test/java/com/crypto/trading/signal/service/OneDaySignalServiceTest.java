@@ -9,9 +9,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -47,6 +50,20 @@ public class OneDaySignalServiceTest {
         assertTrue(result.stream().filter(it -> !SignalStrength.LOW.equals(it.buyStrength()))
                 .toList().isEmpty());
         verify(oneDayRepository, times(1)).findByBuyStrength(any());
+    }
+
+    @Test
+    void shouldFilterThreeDayOldSignals() {
+        List<OneDay> data =List.of(
+                new OneDay("BTCUSDT", Instant.now().minus(Duration.ofDays(5)).toEpochMilli(), SignalStrength.MEDIUM, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0),
+                new OneDay("BTCUSDT", Instant.now().minus(Duration.ofDays(10)).toEpochMilli(), SignalStrength.MEDIUM, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0),
+                new OneDay("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.MEDIUM, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)
+        );
+
+        List<OneDay> result = service.filterOutdated(data);
+
+        assertEquals(1, result.size());
+
     }
 
 }

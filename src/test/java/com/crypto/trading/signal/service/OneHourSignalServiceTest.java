@@ -10,9 +10,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -52,5 +54,20 @@ public class OneHourSignalServiceTest {
                 .toList().isEmpty());
 
         verify(oneHourRepository, times(1)).findByBuyStrength(any());
+    }
+
+
+    @Test
+    void shouldFilter12HoursOldSignals() {
+        List<OneHour> data =List.of(
+                new OneHour("BTCUSDT", Instant.now().minus(Duration.ofHours(15)).toEpochMilli(), SignalStrength.MEDIUM, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0),
+                new OneHour("BTCUSDT", Instant.now().minus(Duration.ofHours(18)).toEpochMilli(), SignalStrength.MEDIUM, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0),
+                new OneHour("BTCUSDT", Instant.now().toEpochMilli(), SignalStrength.MEDIUM, SignalStrength.STRONG, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, TradingSignal.BUY, 0)
+        );
+
+        List<OneHour> result = service.filterOutdated(data);
+
+        assertEquals(1, result.size());
+
     }
 }
