@@ -33,6 +33,13 @@ public class MainConf implements Filter {
             response.setHeader("Access-Control-Allow-Credentials", "true");
             response.setHeader("Access-Control-Allow-Methods", "GET");
             response.setHeader("Access-Control-Max-Age", "3600");
+        } else {
+
+            response.setHeader("Access-Control-Allow-Origin", "https://cryptosignalzone.com/");
+            response.setHeader("Access-Control-Allow-Credentials", "true");
+            response.setHeader("Access-Control-Allow-Methods", "GET");
+            response.setHeader("Access-Control-Max-Age", "3600");
+
         }
 
         chain.doFilter(req, res);
