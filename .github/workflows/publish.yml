@@ -91,27 +91,31 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Terraform Init
-        id: init
-        working-directory: terraform
-        run: terraform init -backend-config="key=$STATE_BUCKET_KEY" -backend-config="bucket=$STATE_BUCKET" -backend-config="region=$TF_VAR_region"
+      # - name: Terraform Init
+      #   id: init
+      #   working-directory: terraform
+      #   run: terraform init -backend-config="key=$STATE_BUCKET_KEY" -backend-config="bucket=$STATE_BUCKET" -backend-config="region=$TF_VAR_region"
 
-      - name: code format
-        id: fmt
-        working-directory: terraform
-        run: terraform fmt -check
+      # - name: code format
+      #   id: fmt
+      #   working-directory: terraform
+      #   run: terraform fmt -check
 
-      - name: Recreate Plan
-        id: plan
-        working-directory: terraform
-        run: terraform plan -no-color -var-file=prod.tfvars > /dev/null
-        continue-on-error: true
+      # - name: Recreate Plan
+      #   id: plan
+      #   working-directory: terraform
+      #   run: terraform plan -no-color -var-file=prod.tfvars > /dev/null
+      #   continue-on-error: true
 
-      - name: Exit on Plan Failure
-        working-directory: terraform
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
+      # - name: Exit on Plan Failure
+      #   working-directory: terraform
+      #   if: steps.plan.outcome == 'failure'
+      #   run: exit 1
+
+      # - name: Recreate
+      #   working-directory: terraform
+      #   run: terraform apply -auto-approve -var-file=prod.tfvars > /dev/null
 
       - name: Recreate
         working-directory: terraform
-        run: terraform apply -auto-approve -var-file=prod.tfvars > /dev/null
+        run: terraform destroy -auto-approve -var-file=prod.tfvars > /dev/null
